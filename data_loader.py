@@ -49,6 +49,7 @@ def load_data():
             sep=',',  # columns are comma-separated
             quotechar='"',  # respect quotes around text
             names=columns,
+            skiprows=1,
         )
 
     except FileNotFoundError:
