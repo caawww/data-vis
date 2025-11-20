@@ -1,13 +1,16 @@
 import streamlit as st
-from data_loader import load_data, set_steam_theme, get_all_categories
+from data_loader import load_data, set_theme, get_all_categories
 from data_processor import prepare_category_data
 from visualizations import create_gap_analysis_chart, create_trend_chart, create_rankings_tables
 from config import ANALYSIS_TYPES
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 def main():
     # Set up page and theme
-    set_steam_theme()
+    set_theme()
     st.set_page_config(
         page_title="Steam Genre Analysis",
         page_icon="🎮",
@@ -138,20 +141,20 @@ def main():
 
             # Top categories by developer interest
             st.markdown(f"**Top {analysis_type} by Developer Releases:**")
-            st.dataframe(dev_top, use_container_width=True)
+            st.dataframe(dev_top, width='stretch')
 
             # Top categories by user interest
             st.markdown(f"**Top {analysis_type} by {user_metric}:**")
-            st.dataframe(user_top[['User_metric_value']], use_container_width=True)
+            st.dataframe(user_top[['User_metric_value']], width='stretch')
 
             # Gap analysis table
             st.markdown("**Largest Attention Gaps:**")
 
             st.markdown("Over-saturated (Dev > User):")
-            st.dataframe(oversaturated[['Gap']], use_container_width=True)
+            st.dataframe(oversaturated[['Gap']], width='stretch')
 
             st.markdown("Under-served (User > Dev):")
-            st.dataframe(underserved[['Gap']], use_container_width=True)
+            st.dataframe(underserved[['Gap']], width='stretch')
 
     # Trend analysis section
     st.subheader("📈 Trend Analysis")

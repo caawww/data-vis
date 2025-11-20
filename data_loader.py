@@ -4,7 +4,7 @@ import numpy as np
 from datetime import datetime
 
 
-def set_steam_theme():
+def set_theme():
     """Apply Steam-like dark theme to the Streamlit app"""
     st.markdown(f"""
         <style>
@@ -57,7 +57,7 @@ def load_data():
         st.stop()
 
     # Data cleaning and preprocessing
-    st.info("🔄 Loading and cleaning data...")
+    print("🔄 Loading and cleaning data...")
 
     # Convert release date to datetime and handle errors
     df['Release date'] = pd.to_datetime(df['Release date'], errors='coerce')
@@ -68,7 +68,7 @@ def load_data():
     filtered_count = len(df)
 
     if initial_count > filtered_count:
-        st.sidebar.warning(f"⚠️ Removed {initial_count - filtered_count} rows with invalid dates")
+        print(f"⚠️ Removed {initial_count - filtered_count} rows with invalid dates")
 
     # Extract release year safely
     df['Release_year'] = df['Release date'].dt.year
@@ -109,7 +109,7 @@ def load_data():
     df['Genres'] = df['Genres'].fillna('')
     df['Tags'] = df['Tags'].fillna('')
 
-    st.success(f"✅ Data loaded successfully: {len(df)} games")
+    print(f"✅ Data loaded successfully: {len(df)} games")
     return df
 
 
