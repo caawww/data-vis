@@ -4,9 +4,8 @@ import streamlit as st
 
 from config import ANALYSIS_TYPES
 from data_loader import load_data, set_theme, get_all_categories
-
-# from data_processor import prepare_category_data
-# from visualizations import create_gap_analysis_chart, create_trend_chart, create_rankings_tables
+from data_processor import prepare_analysis_type_scatter_data
+from visualizations import create_analysis_type_scatter_plot
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -62,6 +61,16 @@ def main():
 
     # TODO - replace with custom categories instead of all categories
     all_categories = get_all_categories(df, analysis_type)
+
+    # Add the scatter plot visualization above data summary
+    st.subheader(f"Popularity vs Quality")
+
+    # Prepare data for scatter plot
+    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range)
+
+    # Create and display the scatter plot
+    scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type)
+    st.plotly_chart(scatter_fig, use_container_width=True)
 
     # Data summary
     with st.expander("📁 Dataset Summary"):
