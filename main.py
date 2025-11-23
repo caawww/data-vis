@@ -60,13 +60,13 @@ def main():
     )
 
     # TODO - replace with custom categories instead of all categories
-    all_categories = get_all_categories(df, analysis_type)
+    all_categories = get_all_categories(df)
 
     # Add the scatter plot visualization above data summary
     st.subheader(f"Popularity vs Quality")
 
     # Prepare data for scatter plot
-    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range)
+    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories)
 
     # Create and display the scatter plot
     scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type)
@@ -80,9 +80,14 @@ def main():
         with col2:
             st.metric("Time Period", f"{min_year} - {max_year}")
         with col3:
-            st.metric(f"Unique {analysis_type}", f"{len(all_categories):,}")
+            st.metric(f"Unique {analysis_type}", f"{len(all_categories[analysis_type]):,}")
 
-        st.info(f'{analysis_type}:  \n{all_categories}')
+        st.info(
+            "\n\n".join(
+                f"**{key}**  \n{values}"
+                for key, values in all_categories.items()
+            )
+        )
 
 
 if __name__ == "__main__":

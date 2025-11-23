@@ -1,4 +1,4 @@
-def prepare_analysis_type_scatter_data(df, analysis_type, year_range):
+def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
 
@@ -22,6 +22,9 @@ def prepare_analysis_type_scatter_data(df, analysis_type, year_range):
     # Clean up - remove whitespace and filter out empty strings
     df_exploded[analysis_type] = df_exploded[analysis_type].str.strip()
     df_exploded = df_exploded[df_exploded[analysis_type] != '']
+
+    # keep only selected categories/genres/tags
+    df_exploded = df_exploded[df_exploded[analysis_type].isin(all_categories[analysis_type])]
 
     # Group by analysis_type and calculate aggregated metrics
     grouped = df_exploded.groupby(analysis_type).agg({
