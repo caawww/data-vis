@@ -31,6 +31,7 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
         y='Avg_review_ratio_pct',
         hover_name=analysis_type,
         custom_data=[
+            scatter_data['Avg_total_review_ratio_pct'],
             scatter_data['Total_reviews'],
             scatter_data['Avg_playtime'],
             scatter_data['Avg_peak_ccu']
@@ -95,9 +96,10 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
             "<b>%{hovertext}</b><br><br>"
             "Number of Games: %{x}<br>"
             "Average Review Ratio: %{y:.1f}%<br>"
-            "Total Reviews: %{customdata[0]:,}<br>"
-            "Avg Playtime: %{customdata[1]:.1f} hours<br>"
-            "Avg Peak CCU: %{customdata[2]:.0f}<extra></extra>"
+            "Total Average Review ratio: %{customdata[0]:.1f}%<br>"
+            "Total Reviews: %{customdata[1]:,}<br>"
+            "Avg Playtime: %{customdata[2]:.1f} hours<br>"
+            "Avg Peak CCU: %{customdata[3]:.0f}<extra></extra>"
         )
     )
 

@@ -42,8 +42,10 @@ def prepare_analysis_type_scatter_data(df, analysis_type, year_range):
     })
 
     # Calculate percentage values for display
+    # TODO - which review ratio to use
     grouped['Avg_review_ratio_pct'] = grouped['Avg_review_ratio'] * 100
     grouped['Total_reviews'] = grouped['Positive'] + grouped['Negative']
+    grouped['Avg_total_review_ratio_pct'] = grouped['Positive'] / grouped['Total_reviews'] * 100
 
     # Fill NaN values for playtime and CCU with 0
     grouped['Avg_playtime'] = grouped['Avg_playtime'].fillna(0)
