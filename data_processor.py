@@ -1,3 +1,9 @@
+import pandas as pd
+
+
+def filter_year(df, year_range):
+    return df[(df['Release_year'] >= year_range[0]) & (df['Release_year'] <= year_range[1])]
+
 def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
@@ -6,13 +12,12 @@ def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_catego
         df: DataFrame with game data
         analysis_type: 'Genres', 'Tags', or 'Categories'
         year_range: tuple of (min_year, max_year)
+        all_categories: dict with lists of categories/genres/tags to include for each analysis type
 
     Returns:
         DataFrame with aggregated metrics per analysis_type
     """
-    # Filter by year range
-    min_year, max_year = year_range
-    df_filtered = df[(df['Release_year'] >= min_year) & (df['Release_year'] <= max_year)]
+    df_filtered = filter_year(df, year_range)
 
     # Explode the analysis_type column (split comma-separated values)
     df_exploded = df_filtered.copy()
