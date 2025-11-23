@@ -7,7 +7,6 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
     """
     Create a scatter plot showing analysis_type categories vs review ratio
     """
-
     if scatter_data.empty:
         fig = go.Figure()
         fig.add_annotation(
@@ -31,10 +30,11 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
         x='Game_count',
         y='Avg_review_ratio_pct',
         hover_name=analysis_type,
-        hover_data={
-            'Game_count': True,
-            'Avg_review_ratio_pct': ':.1f'
-        },
+        custom_data=[
+            scatter_data['Total_reviews'],
+            scatter_data['Avg_playtime'],
+            scatter_data['Avg_peak_ccu']
+        ],
         size_max=15,
         color_discrete_sequence=[CUSTOM_COLOURS['accent_blue']]
     )
@@ -73,7 +73,8 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
         gridcolor=CUSTOM_COLOURS['text'],
         zerolinecolor=CUSTOM_COLOURS['text'],
         tickformat=',',
-        range=[0, scatter_data['Game_count'].max() * 1.05]
+        type='log',
+        # range=[0, scatter_data['Game_count'].max() * 1.05]
     )
 
     fig.update_yaxes(
@@ -93,7 +94,10 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
         hovertemplate=(
             "<b>%{hovertext}</b><br><br>"
             "Number of Games: %{x}<br>"
-            "Average Review Ratio: %{y:.1f}%<extra></extra>"
+            "Average Review Ratio: %{y:.1f}%<br>"
+            "Total Reviews: %{customdata[0]:,}<br>"
+            "Avg Playtime: %{customdata[1]:.1f} hours<br>"
+            "Avg Peak CCU: %{customdata[2]:.0f}<extra></extra>"
         )
     )
 

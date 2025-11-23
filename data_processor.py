@@ -29,8 +29,8 @@ def prepare_analysis_type_scatter_data(df, analysis_type, year_range):
         'Review_ratio': 'mean',  # Average review ratio
         'Positive': 'sum',  # Total positive reviews
         'Negative': 'sum',  # Total negative reviews
-        'Average playtime forever': lambda x: x[x > 0].mean(),  # Avg playtime (only games with playtime > 0)
-        'Peak CCU': lambda x: x[x > 0].mean()  # Avg peak CCU (only games with CCU > 0)
+        'Average playtime forever': 'mean',  # Avg playtime
+        'Peak CCU': 'mean'  # Avg peak CCU
     }).reset_index()
 
     # Rename columns for clarity
