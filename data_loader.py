@@ -31,7 +31,6 @@ def set_theme():
     """, unsafe_allow_html=True)
 
 
-
 @st.cache_data
 def load_data():
     """Load and preprocess the Steam games dataset"""
@@ -105,6 +104,17 @@ def load_data():
     df['Categories'] = df['Categories'].fillna('')
     df['Genres'] = df['Genres'].fillna('')
     df['Tags'] = df['Tags'].fillna('')
+
+    # Normalize Categories / Genres / Tags capitalization
+    def normalize_list_string(s):
+        if not isinstance(s, str) or s.strip() == "":
+            return s
+
+        items = [item.strip().title() for item in s.split(',')]
+        return ",".join(items)
+
+    for col in ['Categories', 'Genres', 'Tags']:
+        df[col] = df[col].apply(normalize_list_string)
 
     print(f"✅ Data loaded successfully: {len(df)} games")
     return df
