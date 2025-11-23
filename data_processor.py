@@ -63,3 +63,28 @@ def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_catego
     grouped = grouped[grouped['Game_count'] >= 3]
 
     return grouped.sort_values('Game_count', ascending=False)
+
+
+def prepare_ccu_histogram_data(df, year_range):
+    """
+    Prepare histogram data for Peak CCU ranges.
+
+    Args:
+        df: DataFrame with game data
+        year_range: tuple of (min_year, max_year)
+
+    Returns:
+        DataFrame with 'CCU_bin' as index and counts as values
+    """
+    df_filtered = filter_year(df, year_range)
+
+    # Define bins
+    bins = [0, 1, 20, 200, 2000, 20000, float('inf')]
+    labels = ['0-1', '2-20', '21-200', '201-2000', '2001-20000', '20001+']
+
+    df_filtered['CCU_bin'] = pd.cut(df_filtered['Peak CCU'], bins=bins, labels=labels, right=True)
+
+    # Count number of games per bin
+    ccu_counts = df_filtered['CCU_bin'].value_counts().sort_index()
+
+    return ccu_counts

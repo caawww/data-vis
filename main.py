@@ -4,8 +4,8 @@ import streamlit as st
 
 from config import ANALYSIS_TYPES
 from data_loader import load_data, set_theme, get_all_categories
-from data_processor import prepare_analysis_type_scatter_data
-from visualizations import create_analysis_type_scatter_plot
+from data_processor import prepare_analysis_type_scatter_data, prepare_ccu_histogram_data
+from visualizations import create_analysis_type_scatter_plot, create_ccu_histogram
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -71,6 +71,13 @@ def main():
     # Create and display the scatter plot
     scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type)
     st.plotly_chart(scatter_fig, use_container_width=True)
+
+    col_left, col_right = st.columns(2)
+    with col_left:
+        st.subheader("Popularity Distribution (Peak CCU)")
+        ccu_counts = prepare_ccu_histogram_data(df, year_range)
+        fig_hist = create_ccu_histogram(ccu_counts)
+        st.plotly_chart(fig_hist, use_container_width=True)
 
     # Data summary
     with st.expander("📁 Dataset Summary"):

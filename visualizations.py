@@ -104,3 +104,34 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
     )
 
     return fig
+
+
+def create_ccu_histogram(ccu_counts):
+    """
+    Create a histogram for Peak CCU ranges.
+
+    Args:
+        ccu_counts: Series with CCU_bin as index and counts as values
+
+    Returns:
+        Plotly figure
+    """
+    fig = px.bar(
+        x=ccu_counts.index,
+        y=ccu_counts.values,
+        labels={'x': 'Peak CCU Range', 'y': 'Number of Games'},
+        title='Games by Peak Concurrent Users',
+        color_discrete_sequence=[CUSTOM_COLOURS['accent_blue']]
+    )
+
+    fig.update_layout(
+        paper_bgcolor=CUSTOM_COLOURS['background'],
+        plot_bgcolor=CUSTOM_COLOURS['card'],
+        font=dict(color=CUSTOM_COLOURS['text']),
+        title_font_size=16
+    )
+
+    fig.update_xaxes(gridcolor=CUSTOM_COLOURS['text'], zerolinecolor=CUSTOM_COLOURS['text'])
+    fig.update_yaxes(gridcolor=CUSTOM_COLOURS['text'], zerolinecolor=CUSTOM_COLOURS['text'])
+
+    return fig
