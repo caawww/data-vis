@@ -4,8 +4,8 @@ import streamlit as st
 
 from config import ANALYSIS_TYPES
 from data_loader import load_data, set_theme, get_all_categories
-from data_processor import prepare_analysis_type_scatter_data, prepare_ccu_histogram_data
-from visualizations import create_analysis_type_scatter_plot, create_ccu_histogram
+from data_processor import prepare_analysis_type_scatter_data, prepare_ccu_histogram_data, prepare_category_metric_data
+from visualizations import create_analysis_type_scatter_plot, create_ccu_histogram, create_category_metric_bar
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -25,6 +25,9 @@ def main():
 
     # Load data
     df = load_data()
+
+    # TODO - replace with custom categories instead of all categories
+    all_categories = get_all_categories(df)
 
     # Check data
     if len(df) == 0:
@@ -59,8 +62,16 @@ def main():
         step=1
     )
 
-    # TODO - replace with custom categories instead of all categories
-    all_categories = get_all_categories(df)
+    # Right column controls
+    st.sidebar.subheader("Analysis Type")
+    right_metric = st.sidebar.selectbox(
+        "Select Metric for Bar Chart (Right Side):",
+        options=['Total_reviews', 'Game_count', 'Avg_peak_ccu'],
+        index=0
+    )
+    upper_buffer = len(all_categories[analysis_type])
+    top_n = st.sidebar.slider("Top N categories to show", min_value=5, max_value=min(100, upper_buffer),
+                              value=min(40, upper_buffer), step=1)
 
     # Add the scatter plot visualization above data summary
     st.subheader(f"Popularity vs Quality")
@@ -71,6 +82,12 @@ def main():
     # Create and display the scatter plot
     scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type)
     st.plotly_chart(scatter_fig, use_container_width=True)
+
+    # Visualise multiple data
+    st.subheader(f"{right_metric.replace('_', ' ')} per {analysis_type}")
+    df_right = prepare_category_metric_data(df, analysis_type, year_range, right_metric, top_n=top_n)
+    fig_right = create_category_metric_bar(df_right, analysis_type, right_metric)
+    st.plotly_chart(fig_right, use_container_width=True)
 
     col_left, col_right = st.columns(2)
     with col_left:

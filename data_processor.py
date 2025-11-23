@@ -4,6 +4,7 @@ import pandas as pd
 def filter_year(df, year_range):
     return df[(df['Release_year'] >= year_range[0]) & (df['Release_year'] <= year_range[1])]
 
+
 def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
@@ -88,3 +89,54 @@ def prepare_ccu_histogram_data(df, year_range):
     ccu_counts = df_filtered['CCU_bin'].value_counts().sort_index()
 
     return ccu_counts
+
+
+def prepare_category_metric_data(df, analysis_type, year_range, metric, top_n=None):
+    """
+    Prepare data for bar chart showing a selected metric per category.
+
+    Args:
+        df: DataFrame with game data
+        analysis_type: 'Genres', 'Tags', or 'Categories'
+        year_range: tuple of (min_year, max_year)
+        metric: 'Total_reviews', 'Game_count', 'Avg_peak_ccu'
+        top_n: int, optional, limit to top N categories by the metric
+
+    Returns:
+        DataFrame with columns: [analysis_type, metric]
+    """
+    # Filter by year
+    min_year, max_year = year_range
+    df_filtered = df[(df['Release_year'] >= min_year) & (df['Release_year'] <= max_year)]
+
+    # Explode categories/tags/genres
+    df_exploded = df_filtered.copy()
+    df_exploded[analysis_type] = df_exploded[analysis_type].str.split(',')
+    df_exploded = df_exploded.explode(analysis_type)
+    df_exploded[analysis_type] = df_exploded[analysis_type].str.strip()
+    df_exploded = df_exploded[df_exploded[analysis_type] != '']
+
+    # Aggregate metrics
+    grouped = df_exploded.groupby(analysis_type).agg({
+        'AppID': 'count',  # number of games
+        'Positive': 'sum',
+        'Negative': 'sum',
+        'Peak CCU': 'mean'
+    }).reset_index()
+
+    # Add derived metrics
+    grouped['Game_count'] = grouped['AppID']
+    grouped['Total_reviews'] = grouped['Positive'] + grouped['Negative']
+    grouped['Avg_peak_ccu'] = grouped['Peak CCU']
+
+    # Select desired metric
+    grouped_metric = grouped[[analysis_type, metric]]
+
+    # Sort by metric descending
+    grouped_metric = grouped_metric.sort_values(metric, ascending=False)
+
+    # Limit top N if requested
+    if top_n:
+        grouped_metric = grouped_metric.head(top_n)
+
+    return grouped_metric

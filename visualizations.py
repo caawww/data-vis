@@ -1,5 +1,6 @@
 import plotly.express as px
 import plotly.graph_objects as go
+
 from config import CUSTOM_COLOURS
 
 
@@ -133,5 +134,52 @@ def create_ccu_histogram(ccu_counts):
 
     fig.update_xaxes(gridcolor=CUSTOM_COLOURS['text'], zerolinecolor=CUSTOM_COLOURS['text'])
     fig.update_yaxes(gridcolor=CUSTOM_COLOURS['text'], zerolinecolor=CUSTOM_COLOURS['text'])
+
+    return fig
+
+
+def create_category_metric_bar(df_metric, analysis_type, metric):
+    """
+    Create a bar chart for a specific metric per category.
+    """
+    if df_metric.empty:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="No data available for the selected filters",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5, xanchor='center', yanchor='middle',
+            showarrow=False,
+            font=dict(size=16, color=CUSTOM_COLOURS['text'])
+        )
+        fig.update_layout(
+            paper_bgcolor=CUSTOM_COLOURS['background'],
+            plot_bgcolor=CUSTOM_COLOURS['background'],
+            font=dict(color=CUSTOM_COLOURS['text']),
+            height=500
+        )
+        return fig
+
+    fig = px.bar(
+        df_metric,
+        x=analysis_type,
+        y=metric,
+        text=metric,
+        color_discrete_sequence=[CUSTOM_COLOURS['accent_blue']]
+    )
+
+    fig.update_layout(
+        paper_bgcolor=CUSTOM_COLOURS['background'],
+        plot_bgcolor=CUSTOM_COLOURS['card'],
+        font=dict(color=CUSTOM_COLOURS['text']),
+        xaxis_title=analysis_type,
+        yaxis_title=metric.replace('_', ' '),
+        height=500
+    )
+
+    fig.update_traces(
+        texttemplate='%{text:.2f}' if df_metric[metric].dtype != int else '%{text}',
+        textposition='outside',
+        marker=dict(line=dict(width=1, color=CUSTOM_COLOURS['text']))
+    )
 
     return fig
