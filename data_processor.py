@@ -5,7 +5,7 @@ def filter_year(df, year_range):
     return df[(df['Release_year'] >= year_range[0]) & (df['Release_year'] <= year_range[1])]
 
 
-def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories):
+def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories, number_of_games_range):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
 
@@ -61,7 +61,7 @@ def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_catego
     grouped['Avg_peak_ccu'] = grouped['Avg_peak_ccu'].fillna(0)
 
     # Filter out categories with very few games (optional - adjust threshold as needed)
-    grouped = grouped[grouped['Game_count'] >= 3]
+    grouped = grouped[grouped['Game_count'] >= number_of_games_range]
 
     return grouped.sort_values('Game_count', ascending=False)
 

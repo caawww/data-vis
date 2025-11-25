@@ -62,6 +62,14 @@ def main():
         step=1
     )
 
+    number_of_games_range = st.sidebar.slider(
+        "Select Number of Min Games:",
+        min_value=1,
+        max_value=50,
+        value=1,
+        step=1
+    )
+
     # Right column controls
     st.sidebar.subheader("Analysis Type")
     right_metric = st.sidebar.selectbox(
@@ -77,7 +85,7 @@ def main():
     st.subheader(f"Positiveness of Reviews vs Number of Released Games by {analysis_type}")
 
     # Prepare data for scatter plot
-    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories)
+    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories, number_of_games_range)
 
     # Create and display the scatter plot
     scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type)
