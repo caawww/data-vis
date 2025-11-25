@@ -82,13 +82,25 @@ def main():
                               value=min(40, upper_buffer), step=1)
 
     # Add the scatter plot visualization above data summary
+    selected_categories = st.multiselect(
+        f"{analysis_type} to highlight:",
+        options=all_categories[analysis_type],
+        default=None,
+    )
+
     st.subheader(f"Positiveness of Reviews vs Number of Released Games by {analysis_type}")
 
     # Prepare data for scatter plot
     scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories, number_of_games_range)
 
     # Create and display the scatter plot
-    scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type)
+    scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type, selected_categories)
+    st.plotly_chart(scatter_fig, use_container_width=True)
+
+    st.subheader(f"Peak CCU vs Number of Released Games by {analysis_type}")
+    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories,
+                                                      number_of_games_range)
+    scatter_fig = create_analysis_type_scatter_plot_peak(scatter_data, analysis_type, selected_categories)
     st.plotly_chart(scatter_fig, use_container_width=True)
 
     # Visualise multiple data
