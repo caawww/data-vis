@@ -3,7 +3,7 @@ import warnings
 import streamlit as st
 
 from config import ANALYSIS_TYPES
-from data_loader import load_data, set_theme, get_all_categories
+from data_loader import load_data, set_theme, get_all_categories, filter_data
 from data_processor import prepare_analysis_type_scatter_data, prepare_ccu_histogram_data, prepare_category_metric_data
 from visualizations import create_analysis_type_scatter_plot, create_ccu_histogram, create_category_metric_bar, \
     create_analysis_type_scatter_plot_peak
@@ -26,6 +26,8 @@ def main():
 
     # Load data
     df = load_data()
+    total_number_of_games = len(df)
+    df = filter_data(df)
 
     # TODO - replace with custom categories instead of all categories
     all_categories = get_all_categories(df)
@@ -119,12 +121,16 @@ def main():
 
     # Data summary
     with st.expander("📁 Dataset Summary"):
-        col1, col2, col3 = st.columns(3)
+        col1, col2, col3, col4 = st.columns(4)
+        filtered_number_of_games = len(df)
         with col1:
-            st.metric("Total Games", f"{len(df):,}")
+            st.metric("Total Games", f"{total_number_of_games:,}")
         with col2:
-            st.metric("Time Period", f"{min_year} - {max_year}")
+            st.metric("Filtered Games",
+                      f"{filtered_number_of_games:,} ({100 * filtered_number_of_games / total_number_of_games:.2f}%)")
         with col3:
+            st.metric("Time Period", f"{min_year} - {max_year}")
+        with col4:
             st.metric(f"Unique {analysis_type}", f"{len(all_categories[analysis_type]):,}")
 
         st.info(

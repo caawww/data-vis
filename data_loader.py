@@ -64,6 +64,9 @@ def load_data():
         st.error("❌ File 'data/games.csv' not found.")
         st.stop()
 
+    return df
+
+def filter_data(df):
     # Convert release date to datetime and handle errors
     df['Release date'] = pd.to_datetime(df['Release date'], errors='coerce')
 
