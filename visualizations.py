@@ -41,19 +41,6 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
         color_discrete_sequence=[CUSTOM_COLOURS['accent_blue']]
     )
 
-    # 50% reference line
-    fig.add_hline(
-        y=50,
-        line_dash="dash",
-        line_color=CUSTOM_COLOURS['accent_green'],
-        line_width=1,
-        opacity=0.7,
-        annotation_text="50% Review Ratio",
-        annotation_position="right",
-        annotation_font_size=12,
-        annotation_font_color=CUSTOM_COLOURS['accent_green']
-    )
-
     # Update layout styling
     fig.update_layout(
         # title=f'{analysis_type} Analysis: Popularity vs Quality',
