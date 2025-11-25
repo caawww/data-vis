@@ -71,16 +71,16 @@ def main():
         step=1
     )
 
-    # Right column controls
-    st.sidebar.subheader("Analysis Type")
-    right_metric = st.sidebar.selectbox(
-        "Select Metric for Bar Chart (Right Side):",
-        options=['Total_reviews', 'Game_count', 'Avg_peak_ccu'],
-        index=0
-    )
-    upper_buffer = len(all_categories[analysis_type])
-    top_n = st.sidebar.slider("Top N categories to show", min_value=5, max_value=min(100, upper_buffer),
-                              value=min(40, upper_buffer), step=1)
+    # # Right column controls
+    # st.sidebar.subheader("Analysis Type")
+    # right_metric = st.sidebar.selectbox(
+    #     "Select Metric for Bar Chart (Right Side):",
+    #     options=['Total_reviews', 'Game_count', 'Avg_peak_ccu'],
+    #     index=0
+    # )
+    # upper_buffer = len(all_categories[analysis_type])
+    # top_n = st.sidebar.slider("Top N categories to show", min_value=5, max_value=min(100, upper_buffer),
+    #                           value=min(40, upper_buffer), step=1)
 
     # Add the scatter plot visualization above data summary
     selected_categories = st.multiselect(
@@ -104,18 +104,18 @@ def main():
     scatter_fig = create_analysis_type_scatter_plot_peak(scatter_data, analysis_type, selected_categories)
     st.plotly_chart(scatter_fig, use_container_width=True)
 
-    # Visualise multiple data
-    st.subheader(f"{right_metric.replace('_', ' ')} per {analysis_type} [TODO RENAME]")
-    df_right = prepare_category_metric_data(df, analysis_type, year_range, right_metric, top_n=top_n)
-    fig_right = create_category_metric_bar(df_right, analysis_type, right_metric)
-    st.plotly_chart(fig_right, use_container_width=True)
-
-    col_left, col_right = st.columns(2)
-    with col_left:
-        st.subheader("Popularity Distribution (Peak CCU)")
-        ccu_counts = prepare_ccu_histogram_data(df, year_range)
-        fig_hist = create_ccu_histogram(ccu_counts)
-        st.plotly_chart(fig_hist, use_container_width=True)
+    # # Visualise multiple data
+    # st.subheader(f"{right_metric.replace('_', ' ')} per {analysis_type} [TODO RENAME]")
+    # df_right = prepare_category_metric_data(df, analysis_type, year_range, right_metric, top_n=top_n)
+    # fig_right = create_category_metric_bar(df_right, analysis_type, right_metric)
+    # st.plotly_chart(fig_right, use_container_width=True)
+    #
+    # col_left, col_right = st.columns(2)
+    # with col_left:
+    #     st.subheader("Popularity Distribution (Peak CCU)")
+    #     ccu_counts = prepare_ccu_histogram_data(df, year_range)
+    #     fig_hist = create_ccu_histogram(ccu_counts)
+    #     st.plotly_chart(fig_hist, use_container_width=True)
 
     # Data summary
     with st.expander("📁 Dataset Summary"):
