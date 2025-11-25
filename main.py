@@ -74,7 +74,7 @@ def main():
                               value=min(40, upper_buffer), step=1)
 
     # Add the scatter plot visualization above data summary
-    st.subheader(f"Popularity vs Quality")
+    st.subheader(f"Positiveness of Reviews vs Number of Released Games by {analysis_type}")
 
     # Prepare data for scatter plot
     scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories)
@@ -84,7 +84,7 @@ def main():
     st.plotly_chart(scatter_fig, use_container_width=True)
 
     # Visualise multiple data
-    st.subheader(f"{right_metric.replace('_', ' ')} per {analysis_type}")
+    st.subheader(f"{right_metric.replace('_', ' ')} per {analysis_type} [TODO RENAME]")
     df_right = prepare_category_metric_data(df, analysis_type, year_range, right_metric, top_n=top_n)
     fig_right = create_category_metric_bar(df_right, analysis_type, right_metric)
     st.plotly_chart(fig_right, use_container_width=True)
