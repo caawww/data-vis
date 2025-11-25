@@ -12,5 +12,5 @@ CUSTOM_COLOURS = {
 
 
 ANALYSIS_TYPES = [
-    'Categories', 'Genres', 'Tags'
+    'Categories', 'Tags'
 ]
