@@ -56,9 +56,9 @@ def create_analysis_type_scatter_plot(scatter_data, analysis_type):
 
     # Update layout styling
     fig.update_layout(
-        title=f'{analysis_type} Analysis: Popularity vs Quality',
-        xaxis_title='Number of Games',
-        yaxis_title='Average Review Ratio (%)',
+        # title=f'{analysis_type} Analysis: Popularity vs Quality',
+        xaxis_title='Number of Released Games (log)',
+        yaxis_title='Average Ratio of Positive Reviews (%)',
         paper_bgcolor=CUSTOM_COLOURS['background'],
         plot_bgcolor=CUSTOM_COLOURS['card'],
         font=dict(color=CUSTOM_COLOURS['text']),
