@@ -5,7 +5,8 @@ import streamlit as st
 from config import ANALYSIS_TYPES
 from data_loader import load_data, set_theme, get_all_categories
 from data_processor import prepare_analysis_type_scatter_data, prepare_ccu_histogram_data, prepare_category_metric_data
-from visualizations import create_analysis_type_scatter_plot, create_ccu_histogram, create_category_metric_bar
+from visualizations import create_analysis_type_scatter_plot, create_ccu_histogram, create_category_metric_bar, \
+    create_analysis_type_scatter_plot_peak
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
