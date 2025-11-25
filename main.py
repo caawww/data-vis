@@ -41,8 +41,8 @@ def main():
     analysis_type = st.sidebar.radio(
         "Analyze by:",
         options=ANALYSIS_TYPES,
-        index=0,
-        help="Choose whether to analyze by Genres or Tags"
+        index=1,
+        help="Choose whether to analyze by Categories or Tags"
     )
 
     # Year range slider - safely get min and max years
