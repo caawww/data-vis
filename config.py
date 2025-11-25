@@ -7,7 +7,8 @@ CUSTOM_COLOURS = {
     'accent_orange': '#E69F00',     # high-contrast orange
     'accent_green': '#009E73',      # high-contrast green
     'accent_purple': '#CC79A7',     # high-contrast purple
-    'white': '#ffffff'              # for marker outlines or text
+    'white': '#ffffff',             # for marker outlines or text,
+    'red': '#ff0000',
 }
 
 
