@@ -94,6 +94,11 @@ def load_data():
 
     # Calculate derived metrics
     df['Total_reviews'] = df['Positive'] + df['Negative']
+
+    review_count_filter = 10
+    df = df[df['Total_reviews'] >= review_count_filter]
+    print(f"⚠️ Removed {filtered_count - len(df)} rows with less than {review_count_filter} reviews")
+
     df['Review_ratio'] = np.where(
         df['Total_reviews'] > 0,
         df['Positive'] / df['Total_reviews'],
