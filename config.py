@@ -10,8 +10,3 @@ CUSTOM_COLOURS = {
     'white': '#ffffff',             # for marker outlines or text,
     'red': '#ff0000',
 }
-
-
-ANALYSIS_TYPES = [
-    'Categories', 'Tags'
-]

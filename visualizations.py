@@ -4,9 +4,9 @@ import plotly.graph_objects as go
 from config import CUSTOM_COLOURS
 
 
-def create_main_scatter_plot(scatter_data, analysis_type, selected_categories):
+def create_main_scatter_plot(scatter_data, selected_categories):
     """
-    Create a scatter plot showing analysis_type categories vs review ratio
+    Create a scatter plot showing Tags categories vs review ratio
     """
     if scatter_data.empty:
         fig = go.Figure()
@@ -25,13 +25,13 @@ def create_main_scatter_plot(scatter_data, analysis_type, selected_categories):
         )
         return fig
 
-    scatter_data['highlight'] = scatter_data[analysis_type].isin(selected_categories)
+    scatter_data['highlight'] = scatter_data['Tags'].isin(selected_categories)
     # Create scatter plot with only two hover values
     fig = px.scatter(
         scatter_data,
         x='Game_count',
         y='Avg_peak_ccu',
-        hover_name=analysis_type,
+        hover_name='Tags',
         custom_data=[
             scatter_data['Avg_total_review_ratio_pct'],
             scatter_data['Total_reviews'],
@@ -42,14 +42,14 @@ def create_main_scatter_plot(scatter_data, analysis_type, selected_categories):
         size_max=15,
         color="highlight",
         color_discrete_map={
-            True: CUSTOM_COLOURS['red'],   # color for items in your list
-            False: CUSTOM_COLOURS['accent_blue']    # default color
+            True: CUSTOM_COLOURS['red'],  # color for items in your list
+            False: CUSTOM_COLOURS['accent_blue']  # default color
         }
     )
 
     # Update layout styling
     fig.update_layout(
-        # title=f'{analysis_type} Analysis: Popularity vs Quality',
+        # title=f'Tags Analysis: Popularity vs Quality',
         xaxis_title='Number of Released Games (log)',
         yaxis_title='Average Peak CCU (log)',
         paper_bgcolor=CUSTOM_COLOURS['background'],

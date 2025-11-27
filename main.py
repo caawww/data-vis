@@ -2,8 +2,7 @@ import warnings
 
 import streamlit as st
 
-from config import ANALYSIS_TYPES
-from data_loader import load_data, set_theme, get_all_categories, filter_data
+from data_loader import load_data, set_theme, get_all_tags, filter_data
 from data_processor import prepare_analysis_type_scatter_data
 from visualizations import create_main_scatter_plot
 
@@ -14,7 +13,7 @@ def main():
     # Set up page and theme
     set_theme()
     st.set_page_config(
-        page_title="Steam Genre Analysis",
+        page_title="Steam Tags Analysis",
         page_icon="🎮",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -28,8 +27,7 @@ def main():
     total_number_of_games = len(df)
     df = filter_data(df)
 
-    # TODO - replace with custom categories instead of all categories
-    all_categories = get_all_categories(df)
+    all_tags = get_all_tags(df)
 
     # Check data
     if len(df) == 0:
@@ -38,14 +36,6 @@ def main():
 
     # Sidebar controls
     st.sidebar.header("Control Panel")
-    # Analysis type selection
-    st.sidebar.subheader("Analysis Type")
-    analysis_type = st.sidebar.radio(
-        "Analyze by:",
-        options=ANALYSIS_TYPES,
-        index=1,
-        help="Choose whether to analyze by Categories or Tags"
-    )
 
     # Year range slider - safely get min and max years
     valid_years = df['Release_year'].dropna()
@@ -73,16 +63,16 @@ def main():
     )
 
     # Add the scatter plot visualization above data summary
-    selected_categories = st.multiselect(
-        f"{analysis_type} to highlight:",
-        options=all_categories[analysis_type],
+    selected_tags = st.multiselect(
+        f"Tags to highlight:",
+        options=all_tags,
         default=None,
     )
 
-    st.subheader(f"Peak CCU vs Number of Released Games by {analysis_type}")
-    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories,
-                                                      number_of_games_range)
-    scatter_fig = create_main_scatter_plot(scatter_data, analysis_type, selected_categories)
+    # Main scatter plot
+    st.subheader(f"Peak CCU vs Number of Released Games by Tags")
+    scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_games_range)
+    scatter_fig = create_main_scatter_plot(scatter_data, selected_tags)
     st.plotly_chart(scatter_fig, use_container_width=True)
 
     # Data summary
@@ -97,14 +87,9 @@ def main():
         with col3:
             st.metric("Time Period", f"{min_year} - {max_year}")
         with col4:
-            st.metric(f"Unique {analysis_type}", f"{len(all_categories[analysis_type]):,}")
+            st.metric(f"Unique Tags", f"{len(all_tags):,}")
 
-        st.info(
-            "\n\n".join(
-                f"**{key}**  \n{values}"
-                for key, values in all_categories.items()
-            )
-        )
+        st.info(f"**Tags**  \n{all_tags}")
 
 
 if __name__ == "__main__":

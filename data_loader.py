@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from config import CUSTOM_COLOURS, ANALYSIS_TYPES
+from config import CUSTOM_COLOURS
 
 
 def set_theme():
@@ -124,13 +124,10 @@ def filter_data(df):
     return df
 
 
-def get_all_categories(df):
-    return {
-        at: sorted(set([
-            category.strip()
-            for category_list in df[at].dropna().str.split(',')
-            for category in category_list
-            if category.strip()
-        ]))
-        for at in ANALYSIS_TYPES
-    }
+def get_all_tags(df):
+    return sorted(set([
+        category.strip()
+        for category_list in df['Tags'].dropna().str.split(',')
+        for category in category_list
+        if category.strip()
+    ]))

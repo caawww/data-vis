@@ -2,13 +2,12 @@ def filter_year(df, year_range):
     return df[(df['Release_year'] >= year_range[0]) & (df['Release_year'] <= year_range[1])]
 
 
-def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories, number_of_games_range):
+def prepare_analysis_type_scatter_data(df, year_range, all_categories, number_of_games_range):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
 
     Args:
         df: DataFrame with game data
-        analysis_type: 'Genres', 'Tags', or 'Categories'
         year_range: tuple of (min_year, max_year)
         all_categories: dict with lists of categories/genres/tags to include for each analysis type
 
@@ -19,18 +18,18 @@ def prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_catego
 
     # Explode the analysis_type column (split comma-separated values)
     df_exploded = df_filtered.copy()
-    df_exploded[analysis_type] = df_exploded[analysis_type].str.split(',')
-    df_exploded = df_exploded.explode(analysis_type)
+    df_exploded['Tags'] = df_exploded['Tags'].str.split(',')
+    df_exploded = df_exploded.explode('Tags')
 
     # Clean up - remove whitespace and filter out empty strings
-    df_exploded[analysis_type] = df_exploded[analysis_type].str.strip()
-    df_exploded = df_exploded[df_exploded[analysis_type] != '']
+    df_exploded['Tags'] = df_exploded['Tags'].str.strip()
+    df_exploded = df_exploded[df_exploded['Tags'] != '']
 
     # keep only selected categories/genres/tags
-    df_exploded = df_exploded[df_exploded[analysis_type].isin(all_categories[analysis_type])]
+    df_exploded = df_exploded[df_exploded['Tags'].isin(all_categories)]
 
-    # Group by analysis_type and calculate aggregated metrics
-    grouped = df_exploded.groupby(analysis_type).agg({
+    # Group by Tags and calculate aggregated metrics
+    grouped = df_exploded.groupby('Tags').agg({
         'AppID': 'count',  # Number of games
         'Review_ratio': 'mean',  # Average review ratio
         'Positive': 'sum',  # Total positive reviews
