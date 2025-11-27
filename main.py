@@ -5,8 +5,7 @@ import streamlit as st
 from config import ANALYSIS_TYPES
 from data_loader import load_data, set_theme, get_all_categories, filter_data
 from data_processor import prepare_analysis_type_scatter_data, prepare_ccu_histogram_data, prepare_category_metric_data
-from visualizations import create_analysis_type_scatter_plot, create_ccu_histogram, create_category_metric_bar, \
-    create_analysis_type_scatter_plot_peak
+from visualizations import create_main_scatter_plot, create_ccu_histogram, create_category_metric_bar
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -91,19 +90,10 @@ def main():
         default=None,
     )
 
-    st.subheader(f"Positiveness of Reviews vs Number of Released Games by {analysis_type}")
-
-    # Prepare data for scatter plot
-    scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories, number_of_games_range)
-
-    # Create and display the scatter plot
-    scatter_fig = create_analysis_type_scatter_plot(scatter_data, analysis_type, selected_categories)
-    st.plotly_chart(scatter_fig, use_container_width=True)
-
     st.subheader(f"Peak CCU vs Number of Released Games by {analysis_type}")
     scatter_data = prepare_analysis_type_scatter_data(df, analysis_type, year_range, all_categories,
                                                       number_of_games_range)
-    scatter_fig = create_analysis_type_scatter_plot_peak(scatter_data, analysis_type, selected_categories)
+    scatter_fig = create_main_scatter_plot(scatter_data, analysis_type, selected_categories)
     st.plotly_chart(scatter_fig, use_container_width=True)
 
     # # Visualise multiple data
