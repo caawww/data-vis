@@ -73,7 +73,11 @@ def main():
     st.subheader(f"Peak CCU vs Number of Released Games by Tags")
     scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_games_range)
     scatter_fig = create_main_scatter_plot(scatter_data, selected_tags)
-    st.plotly_chart(scatter_fig, use_container_width=True)
+    event = st.plotly_chart(scatter_fig, use_container_width=True, key="iris", on_select="rerun")
+    if event and event['selection']['points']:
+        clicked_tag = event['selection']['points'][0]['hovertext']
+        st.session_state['tag'] = clicked_tag
+        st.switch_page("pages/Genre_Details.py")
 
     # Data summary
     with st.expander("📁 Dataset Summary"):
