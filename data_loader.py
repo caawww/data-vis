@@ -62,6 +62,7 @@ def load_data():
     return df
 
 
+@st.cache_data
 def filter_data(df):
     # Convert release date to datetime and handle errors
     df['Release date'] = pd.to_datetime(df['Release date'], errors='coerce')
