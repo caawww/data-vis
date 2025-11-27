@@ -44,11 +44,6 @@ def load_data():
         'Movies'
     ]
 
-    needed_cols = [
-        'AppID', 'Name', 'Release date', 'Estimated owners', 'Peak CCU', 'Required age', 'Positive', 'Negative',
-        'Recommendations', 'Average playtime forever', 'Median playtime forever', 'Categories', 'Genres', 'Tags'
-    ]
-
     try:
         df = pd.read_csv(
             'data/games.csv',
