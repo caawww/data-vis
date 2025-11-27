@@ -26,7 +26,8 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         return fig
 
     scatter_data['highlight'] = scatter_data['Tags'].isin(selected_categories)
-    # Create scatter plot with only two hover values
+
+    # Create scatter plot
     fig = px.scatter(
         scatter_data,
         x='Game_count',
@@ -42,8 +43,8 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         size_max=15,
         color="highlight",
         color_discrete_map={
-            True: CUSTOM_COLOURS['red'],  # color for items in your list
-            False: CUSTOM_COLOURS['accent_blue']  # default color
+            True: CUSTOM_COLOURS['red'],
+            False: CUSTOM_COLOURS['accent_blue']
         }
     )
 

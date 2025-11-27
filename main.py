@@ -37,7 +37,7 @@ def main():
     # Sidebar controls
     st.sidebar.header("Control Panel")
 
-    # Year range slider - safely get min and max years
+    # Year range slider
     valid_years = df['Release_year'].dropna()
     if len(valid_years) == 0:
         st.error("❌ No valid release years found in the dataset.")
