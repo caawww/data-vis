@@ -95,7 +95,7 @@ def genre_details_page():
         co_tag_df["Avg Peak CCU"] = avg_ccu
 
         st.subheader(f"Tags Found With '{selected_tag}'")
-        st.dataframe(co_tag_df.style.hide(axis="index"))
+        st.dataframe(co_tag_df, hide_index=True)
     else:
         st.info("No co-occurring tags found.")
 
@@ -105,7 +105,7 @@ def genre_details_page():
     st.dataframe(
         tag_df[
             ["Name", "Release_year", "Peak CCU", "Price", "Total_reviews", "Estimated owners"]
-        ].sort_values(by="Peak CCU", ascending=False)
+        ].sort_values(by="Peak CCU", ascending=False), hide_index=True
     )
 
 
