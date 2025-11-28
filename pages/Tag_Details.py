@@ -15,7 +15,7 @@ def genre_details_page():
         initial_sidebar_state="expanded"
     )
 
-    st.title("📊 Genre / Tag Analysis")
+    st.title("📊 Tag Analysis")
     st.markdown("""""")
 
     df = load_data()

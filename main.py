@@ -77,7 +77,7 @@ def main():
     if event and event['selection']['points']:
         clicked_tag = event['selection']['points'][0]['hovertext']
         st.session_state['tag'] = clicked_tag
-        st.switch_page("pages/Genre_Details.py")
+        st.switch_page("pages/Tag_Details.py")
 
     # Data summary
     with st.expander("📁 Dataset Summary"):
