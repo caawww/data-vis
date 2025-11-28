@@ -4,26 +4,30 @@ import plotly.graph_objects as go
 from config import CUSTOM_COLOURS
 
 
+def empty_figure():
+    fig = go.Figure()
+    fig.add_annotation(
+        text="No data available for the selected filters",
+        xref="paper", yref="paper",
+        x=0.5, y=0.5, xanchor='center', yanchor='middle',
+        showarrow=False,
+        font=dict(size=16, color=CUSTOM_COLOURS['text'])
+    )
+    fig.update_layout(
+        paper_bgcolor=CUSTOM_COLOURS['background'],
+        plot_bgcolor=CUSTOM_COLOURS['background'],
+        font=dict(color=CUSTOM_COLOURS['text']),
+        height=500
+    )
+    return fig
+
+
 def create_main_scatter_plot(scatter_data, selected_categories):
     """
     Create a scatter plot showing Tags categories vs review ratio
     """
     if scatter_data.empty:
-        fig = go.Figure()
-        fig.add_annotation(
-            text="No data available for the selected filters",
-            xref="paper", yref="paper",
-            x=0.5, y=0.5, xanchor='center', yanchor='middle',
-            showarrow=False,
-            font=dict(size=16, color=CUSTOM_COLOURS['text'])
-        )
-        fig.update_layout(
-            paper_bgcolor=CUSTOM_COLOURS['background'],
-            plot_bgcolor=CUSTOM_COLOURS['background'],
-            font=dict(color=CUSTOM_COLOURS['text']),
-            height=500
-        )
-        return fig
+        return empty_figure()
 
     scatter_data['highlight'] = scatter_data['Tags'].isin(selected_categories)
 
