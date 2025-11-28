@@ -34,26 +34,12 @@ def set_theme():
 @st.cache_data
 def load_data():
     """Load and preprocess the Steam games dataset"""
-    columns = [
-        'AppID', 'Name', 'Release date', 'Estimated owners', 'Peak CCU', 'Required age', 'Price',
-        'Discount', 'DLC count', 'About the game', 'Supported languages', 'Full audio languages', 'Reviews',
-        'Header image', 'Website', 'Support url', 'Support email', 'Windows', 'Mac', 'Linux', 'Metacritic score',
-        'Metacritic url', 'User score', 'Positive', 'Negative', 'Score rank', 'Achievements', 'Recommendations',
-        'Notes', 'Average playtime forever', 'Average playtime two weeks', 'Median playtime forever',
-        'Median playtime two weeks', 'Developers', 'Publishers', 'Categories', 'Genres', 'Tags', 'Screenshots',
-        'Movies'
-    ]
-
     try:
         df = pd.read_csv(
             'data/games.csv',
             sep=',',  # columns are comma-separated
             quotechar='"',  # respect quotes around text
-            names=columns,
-            skiprows=1,
         )
-
-        # df = df[needed_cols]
 
     except FileNotFoundError:
         st.error("❌ File 'data/games.csv' not found.")
