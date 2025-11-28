@@ -1,8 +1,6 @@
 import plotly.express as px
 import plotly.graph_objects as go
 
-from config import CUSTOM_COLOURS
-
 
 def empty_figure():
     fig = go.Figure()
@@ -11,12 +9,9 @@ def empty_figure():
         xref="paper", yref="paper",
         x=0.5, y=0.5, xanchor='center', yanchor='middle',
         showarrow=False,
-        font=dict(size=16, color=CUSTOM_COLOURS['text'])
+        font=dict(size=16)
     )
     fig.update_layout(
-        paper_bgcolor=CUSTOM_COLOURS['background'],
-        plot_bgcolor=CUSTOM_COLOURS['background'],
-        font=dict(color=CUSTOM_COLOURS['text']),
         height=500
     )
     return fig
@@ -46,10 +41,7 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         ],
         size_max=15,
         color="highlight",
-        color_discrete_map={
-            True: CUSTOM_COLOURS['red'],
-            False: CUSTOM_COLOURS['accent_blue']
-        }
+        color_discrete_map={True: '#ff0000'}  # TODO - Specify what colour to highlight with
     )
 
     # Update layout styling
@@ -57,28 +49,20 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         # title=f'Tags Analysis: Popularity vs Quality',
         xaxis_title='Number of Released Games (log)',
         yaxis_title='Average Peak CCU (log)',
-        paper_bgcolor=CUSTOM_COLOURS['background'],
-        plot_bgcolor=CUSTOM_COLOURS['card'],
-        font=dict(color=CUSTOM_COLOURS['text']),
         height=600,
         showlegend=False,
         hoverlabel=dict(
-            bgcolor=CUSTOM_COLOURS['sidebar'],
             font_size=12,
             font_family="Arial"
         )
     )
 
     fig.update_xaxes(
-        gridcolor=CUSTOM_COLOURS['text'],
-        zerolinecolor=CUSTOM_COLOURS['text'],
         tickformat=',',
         type='log',
     )
 
     fig.update_yaxes(
-        gridcolor=CUSTOM_COLOURS['text'],
-        zerolinecolor=CUSTOM_COLOURS['text'],
         tickformat=',',
         type='log',
     )
@@ -88,7 +72,7 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         marker=dict(
             size=8,
             opacity=0.7,
-            line=dict(width=1, color=CUSTOM_COLOURS['text'])
+            line=dict(width=1)
         ),
         hovertemplate=(
             "<b>%{hovertext}</b><br><br>"
