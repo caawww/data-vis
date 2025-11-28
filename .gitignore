@@ -10,7 +10,7 @@
 **/_build/
 **/.generated/
 
-data/games.csv
+data/games_original.csv
 
 *.mp4
 *.avi
