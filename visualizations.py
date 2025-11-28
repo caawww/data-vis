@@ -148,4 +148,8 @@ def create_review_ratio_over_time(tag_df, selected_tag):
         marker=dict(size=8, opacity=0.9),
     )
 
+    fig.update_yaxes(
+        range=[-0.02, 1.02],
+    )
+
     return fig
