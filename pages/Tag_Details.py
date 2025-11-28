@@ -95,14 +95,14 @@ def genre_details_page():
         co_tag_df["Avg Price"] = avg_prices
         co_tag_df["Avg Peak CCU"] = avg_ccu
 
-        st.subheader(f"Tags Often Found With '{selected_tag}'")
+        st.subheader(f"Tags Found With '{selected_tag}'")
         st.dataframe(co_tag_df.style.hide(axis="index"))
     else:
         st.info("No co-occurring tags found.")
 
     st.divider()
 
-    st.markdown(f"Games with tag **{selected_tag}**: {len(tag_df)}")
+    st.markdown(f"**{selected_tag}** games:")
     st.dataframe(
         tag_df[
             ["Name", "Release_year", "Peak CCU", "Price", "Total_reviews", "Estimated owners"]
