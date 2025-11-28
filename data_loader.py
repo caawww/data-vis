@@ -2,34 +2,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from config import CUSTOM_COLOURS
-
-
-def set_theme():
-    st.markdown(f"""
-        <style>
-        .main {{
-            background-color: {CUSTOM_COLOURS['background']};
-            color: {CUSTOM_COLOURS['text']};
-        }}
-        .stSidebar {{
-            background-color: {CUSTOM_COLOURS['sidebar']} !important;
-        }}
-        .css-1d391kg, .css-1lcbmhc {{
-            background-color: {CUSTOM_COLOURS['background']};
-        }}
-        h1, h2, h3, h4, h5, h6 {{
-            color: {CUSTOM_COLOURS['white']};
-        }}
-        .stSelectbox label, .stSlider label, .stRadio label {{
-            color: {CUSTOM_COLOURS['text']} !important;
-        }}
-        .stDataFrame {{
-            background-color: {CUSTOM_COLOURS['card']};
-        }}
-        </style>
-    """, unsafe_allow_html=True)
-
 
 @st.cache_data
 def load_data():

@@ -3,13 +3,12 @@ from collections import Counter
 import pandas as pd
 import streamlit as st
 
-from data_loader import load_data, set_theme, get_all_tags, filter_data
+from data_loader import load_data, get_all_tags, filter_data
 from visualizations import create_review_ratio_over_time
 
 
 def genre_details_page():
     # Set up page and theme
-    set_theme()
     st.set_page_config(
         page_title="Steam Tags Analysis",
         page_icon="🎮",

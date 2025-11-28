@@ -1,13 +1,12 @@
 import streamlit as st
 
-from data_loader import load_data, set_theme, get_all_tags, filter_data
+from data_loader import load_data, get_all_tags, filter_data
 from data_processor import prepare_analysis_type_scatter_data
 from visualizations import create_main_scatter_plot
 
 
 def main():
     # Set up page and theme
-    set_theme()
     st.set_page_config(
         page_title="Steam Tags Analysis",
         page_icon="🎮",
