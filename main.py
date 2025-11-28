@@ -1,12 +1,8 @@
-import warnings
-
 import streamlit as st
 
 from data_loader import load_data, set_theme, get_all_tags, filter_data
 from data_processor import prepare_analysis_type_scatter_data
 from visualizations import create_main_scatter_plot
-
-warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 def main():
@@ -73,7 +69,7 @@ def main():
     st.subheader(f"Peak CCU vs Number of Released Games by Tags")
     scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_games_range)
     scatter_fig = create_main_scatter_plot(scatter_data, selected_tags)
-    event = st.plotly_chart(scatter_fig, use_container_width=True, key="iris", on_select="rerun")
+    event = st.plotly_chart(scatter_fig, config={"responsive": True}, key="iris", on_select="rerun")
     if event and event['selection']['points']:
         clicked_tag = event['selection']['points'][0]['hovertext']
         st.session_state['tag'] = clicked_tag

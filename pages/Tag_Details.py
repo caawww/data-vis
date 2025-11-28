@@ -1,6 +1,8 @@
-import streamlit as st
 from collections import Counter
+
 import pandas as pd
+import streamlit as st
+
 from data_loader import load_data, set_theme, get_all_tags, filter_data
 from visualizations import create_review_ratio_over_time
 
@@ -55,7 +57,7 @@ def genre_details_page():
 
     st.subheader(f"Positive Reviews Over Time")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, config={"responsive": True})
 
     # Count co-occurring tags
     co_tags = Counter()
@@ -94,7 +96,7 @@ def genre_details_page():
         co_tag_df["Avg Peak CCU"] = avg_ccu
 
         st.subheader(f"Tags Often Found With '{selected_tag}'")
-        st.dataframe(co_tag_df.style.hide(axis="index"), use_container_width=True)
+        st.dataframe(co_tag_df.style.hide(axis="index"))
     else:
         st.info("No co-occurring tags found.")
 
