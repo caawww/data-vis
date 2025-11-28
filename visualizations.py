@@ -102,3 +102,50 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     )
 
     return fig
+
+
+def create_review_ratio_over_time(tag_df, selected_tag):
+    """Plot average Review_ratio per year for a given tag, including count of games in hover."""
+    if tag_df.empty:
+        return empty_figure()
+
+    # Compute average ratio per year
+    yearly_avg = (
+        tag_df.groupby("Release_year")["Review_ratio"]
+        .mean()
+        .reset_index()
+    )
+
+    # Compute number of games per year
+    yearly_count = (
+        tag_df.groupby("Release_year")["Name"]
+        .count()
+        .reset_index(name="Game_count")
+    )
+
+    # Merge the two
+    yearly_stats = yearly_avg.merge(yearly_count, on="Release_year").sort_values("Release_year")
+
+    fig = px.line(
+        yearly_stats,
+        x="Release_year",
+        y="Review_ratio",
+        markers=True,
+        labels={
+            "Release_year": "Release Year",
+            "Review_ratio": "Average Review Ratio",
+            "Game_count": "Number of Games"
+        },
+        title=f"Average Review Ratio Over Time for Tag '{selected_tag}'",
+        hover_data={
+            "Game_count": True,
+            "Review_ratio": ":.3f"  # cleaner formatting
+        }
+    )
+
+    fig.update_traces(
+        line=dict(width=3),
+        marker=dict(size=8, opacity=0.9),
+    )
+
+    return fig

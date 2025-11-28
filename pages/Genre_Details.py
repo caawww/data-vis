@@ -1,6 +1,7 @@
 import streamlit as st
 
 from data_loader import load_data, set_theme, get_all_tags, filter_data
+from visualizations import create_review_ratio_over_time
 
 
 def genre_details_page():
@@ -31,6 +32,10 @@ def genre_details_page():
     tag_df = df[df["Tags"].apply(lambda t: selected_tag in t)]
 
     st.info("# TODO - PLOTS")
+
+    st.subheader(f"Positive Reviews Over Time")
+    fig = create_review_ratio_over_time(tag_df, selected_tag)
+    st.plotly_chart(fig, use_container_width=True)
 
     st.divider()
 
