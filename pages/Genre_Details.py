@@ -31,7 +31,26 @@ def genre_details_page():
     st.session_state["tag"] = selected_tag
     tag_df = df[df["Tags"].apply(lambda t: selected_tag in t)]
 
-    st.info("# TODO - PLOTS")
+    # Stats about the Tag
+    col1, col2, col3, col4 = st.columns(4)
+
+    tag_count = len(tag_df)
+    median_ratio = tag_df["Review_ratio"].median()
+    median_price = tag_df["Price"].median()
+    min_year = int(tag_df["Release_year"].min())
+    max_year = int(tag_df["Release_year"].max())
+
+    with col1:
+        st.metric("Games With Tag", f"{tag_count:,}")
+
+    with col2:
+        st.metric("Median Review Ratio", f"{median_ratio:.2f}")
+
+    with col3:
+        st.metric("Median Price", f"${median_price:.2f}")
+
+    with col4:
+        st.metric("Active Years", f"{min_year}–{max_year}")
 
     st.subheader(f"Positive Reviews Over Time")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
