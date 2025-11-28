@@ -20,10 +20,9 @@ def genre_details_page():
     df = filter_data(df)
     all_tags = get_all_tags(df)
 
-    st.subheader(f"📌 Analysis for Tag:")
     preselected_tag = st.session_state.get("tag", None)
     selected_tag = st.selectbox(
-        "",# "Select a Tag:",
+        "Analysis for Tag:",
         options=all_tags,
         index=all_tags.index(preselected_tag) if preselected_tag in all_tags else 0,
         key="genre_selector"
