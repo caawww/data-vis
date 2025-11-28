@@ -1,5 +1,6 @@
 import streamlit as st
-
+from collections import Counter
+import pandas as pd
 from data_loader import load_data, set_theme, get_all_tags, filter_data
 from visualizations import create_review_ratio_over_time
 
@@ -55,6 +56,47 @@ def genre_details_page():
     st.subheader(f"Positive Reviews Over Time")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
     st.plotly_chart(fig, use_container_width=True)
+
+    # Count co-occurring tags
+    co_tags = Counter()
+
+    for tags in tag_df["Tags"]:
+        for t in tags.split(','):
+            if t != selected_tag:
+                co_tags[t] += 1
+
+    # Build the DataFrame if there are any co-tags
+    if len(co_tags) > 0:
+        co_tag_df = (
+            pd.DataFrame({
+                "Tags": list(co_tags.keys()),
+                "Games": list(co_tags.values())
+            })
+            .sort_values("Games", ascending=False)
+            .reset_index(drop=True)
+        )
+
+        # Compute aggregated stats inside tag_df
+        avg_ratios = []
+        avg_prices = []
+        avg_ccu = []
+
+        for tags in co_tag_df["Tags"]:
+            # Correct membership test — as you required
+            sub = tag_df[tag_df["Tags"].apply(lambda t: tags in t)]
+
+            avg_ratios.append(sub["Review_ratio"].mean())
+            avg_prices.append(sub["Price"].mean())
+            avg_ccu.append(sub["Peak CCU"].mean())
+
+        co_tag_df["Avg Review Ratio"] = avg_ratios
+        co_tag_df["Avg Price"] = avg_prices
+        co_tag_df["Avg Peak CCU"] = avg_ccu
+
+        st.subheader(f"Tags Often Found With '{selected_tag}'")
+        st.dataframe(co_tag_df.style.hide(axis="index"), use_container_width=True)
+    else:
+        st.info("No co-occurring tags found.")
 
     st.divider()
 
