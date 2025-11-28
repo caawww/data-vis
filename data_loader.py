@@ -127,6 +127,7 @@ def filter_data(input_df):
     return df
 
 
+@st.cache_data
 def get_all_tags(df):
     return sorted(set([
         category.strip()
