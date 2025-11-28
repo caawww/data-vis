@@ -117,10 +117,10 @@ def create_review_ratio_over_time(tag_df, selected_tag):
         markers=True,
         labels={
             "Release_year": "Release Year",
-            "Review_ratio": "Average Review Ratio",
+            "Review_ratio": "Average Positive Review Ratio",
             "Game_count": "Number of Games"
         },
-        title=f"Average Review Ratio Over Time for Tag '{selected_tag}'",
+        # title=f"Average Review Ratio Over Time for Tag '{selected_tag}'",
         hover_data={
             "Game_count": True,
             "Review_ratio": ":.3f"  # cleaner formatting

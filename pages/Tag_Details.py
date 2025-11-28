@@ -54,7 +54,7 @@ def genre_details_page():
     with col4:
         st.metric("Active Years", f"{min_year}–{max_year}")
 
-    st.subheader(f"Positive Reviews Over Time")
+    st.subheader(f"Average Review Ratio Over Time for Tag '{selected_tag}'")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
     st.plotly_chart(fig, config={"responsive": True})
 
