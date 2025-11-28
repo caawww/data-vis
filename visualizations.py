@@ -152,4 +152,8 @@ def create_review_ratio_over_time(tag_df, selected_tag):
         range=[-0.02, 1.02],
     )
 
+    fig.update_xaxes(
+        dtick=1,
+    )
+
     return fig
