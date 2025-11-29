@@ -75,20 +75,20 @@ def main():
         st.switch_page("pages/Tag_Details.py")
 
     # Data summary
-    with st.expander("📁 Dataset Summary"):
-        col1, col2, col3, col4 = st.columns(4)
-        filtered_number_of_games = len(df)
-        with col1:
-            st.metric("Total Games", f"{total_number_of_games:,}")
-        with col2:
-            st.metric("Filtered Games",
-                      f"{filtered_number_of_games:,} ({100 * filtered_number_of_games / total_number_of_games:.2f}%)")
-        with col3:
-            st.metric("Time Period", f"{min_year} - {max_year}")
-        with col4:
-            st.metric(f"Unique Tags", f"{len(all_tags):,}")
+    st.subheader(f"📁 Dataset Summary")
+    col1, col2, col3, col4 = st.columns(4)
+    filtered_number_of_games = len(df)
+    with col1:
+        st.metric("Total Games", f"{total_number_of_games:,}")
+    with col2:
+        st.metric("Filtered Games",
+                  f"{filtered_number_of_games:,} ({100 * filtered_number_of_games / total_number_of_games:.2f}%)")
+    with col3:
+        st.metric("Time Period", f"{min_year} - {max_year}")
+    with col4:
+        st.metric(f"Unique Tags", f"{len(all_tags):,}")
 
-        st.info(f"**Tags**  \n{all_tags}")
+    # st.info(f"**Tags**  \n{all_tags}")
 
 
 if __name__ == "__main__":
