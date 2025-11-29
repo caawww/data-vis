@@ -1,7 +1,9 @@
 import plotly.express as px
 import plotly.graph_objects as go
+import streamlit as st
 
 
+@st.cache_data
 def empty_figure():
     fig = go.Figure()
     fig.add_annotation(
@@ -17,6 +19,7 @@ def empty_figure():
     return fig
 
 
+@st.cache_data
 def create_main_scatter_plot(scatter_data, selected_categories):
     """
     Create a scatter plot showing Tags categories vs review ratio
@@ -88,6 +91,7 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     return fig
 
 
+@st.cache_data
 def create_review_ratio_over_time(tag_df, selected_tag):
     """Plot average Review_ratio per year for a given tag, including count of games in hover."""
     if tag_df.empty:

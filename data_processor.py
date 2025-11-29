@@ -1,7 +1,11 @@
+import streamlit as st
+
+@st.cache_data
 def filter_year(df, year_range):
     return df[(df['Release_year'] >= year_range[0]) & (df['Release_year'] <= year_range[1])]
 
 
+@st.cache_data
 def prepare_analysis_type_scatter_data(df, year_range, all_categories, number_of_games_range):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
