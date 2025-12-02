@@ -40,7 +40,7 @@ def genre_details_page():
     with cols[0]:
         st.metric("Games With Tag", f"{len(tag_df):,}")
         st.metric("Free to Play", f"{(tag_df["Price"] == 0).sum()}")
-        st.metric("Active Years", f"{int(tag_df["Release_year"].min())}–{int(tag_df["Release_year"].max())}")
+        st.metric("Release Period", f"{int(tag_df["Release_year"].min())}–{int(tag_df["Release_year"].max())}")
 
     with cols[1]:
         st.metric("Average Review Ratio", f"{tag_df["Review_ratio"].mean():.2f}")
