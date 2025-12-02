@@ -2,7 +2,7 @@
 import streamlit as st
 
 from data_loader import load_data, get_all_tags, filter_data
-from data_processor import prepare_analysis_type_scatter_data
+from data_processor import prepare_analysis_type_scatter_data, filter_year
 from visualizations import create_main_scatter_plot
 
 
@@ -26,8 +26,6 @@ You can also select a specific tag to explore it in more detail. The data comes 
     raw_df = load_data()
     total_number_of_games = len(raw_df)
     raw_df = filter_data(raw_df)
-
-    all_tags = get_all_tags(raw_df)
 
     # Check data
     if len(raw_df) == 0:
@@ -64,13 +62,15 @@ You can also select a specific tag to explore it in more detail. The data comes 
 
     df = raw_df[raw_df['Total_reviews'] >= number_of_min_reviews]
     print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
+    all_tags = get_all_tags(df)
 
     scatter_data = prepare_analysis_type_scatter_data(df, raw_df, year_range, all_tags)
 
     # Data summary
     st.subheader(f"📁 Dataset Summary")
     col1, col2 = st.columns(2)
-    filtered_number_of_games = len(df)
+    filtered_number_of_games = len(filter_year(df, year_range))
+    print("filter: ", filtered_number_of_games)
     with col1:
         st.metric("Total Games", f"{total_number_of_games:,} (100.00%)")
         st.metric("Filtered Games",
