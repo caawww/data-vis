@@ -16,7 +16,11 @@ def main():
     )
 
     st.title("🎮 Steam Visualisation")
-    st.markdown("""""")
+    st.markdown("""
+This visualization shows how different video game genres (called tags on the Steam platform) appeal to the public. 
+The main overview enables you to explore the tags from a big picture. 
+You can also select a specific tag to see more information. The data comes from kaggle [dataset](https://www.kaggle.com/datasets/fronkongames/steam-games-dataset/). 
+        """)
 
     # Load data
     raw_df = load_data()
