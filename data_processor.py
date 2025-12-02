@@ -60,6 +60,7 @@ def prepare_analysis_type_scatter_data(df, raw_df, year_range, all_categories):
     # Fill NaN values for playtime and CCU with 0
     grouped['Avg_playtime'] = grouped['Avg_playtime'].fillna(0)
     grouped['Avg_peak_ccu'] = grouped['Avg_peak_ccu'].fillna(0)
+    grouped['Avg_peak_ccu'] = grouped['Avg_peak_ccu'].replace(0, 0.1)
 
     # --- explode raw_df for global counts ---
     raw_exploded = raw_df.copy()

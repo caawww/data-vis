@@ -71,7 +71,6 @@ You can also select a specific tag to explore it in more detail. The data comes 
     st.subheader(f"📁 Dataset Summary")
     col1, col2 = st.columns(2)
     filtered_number_of_games = len(filter_year(df, year_range))
-    print("filter: ", filtered_number_of_games)
     with col1:
         st.metric("Total Games", f"{total_number_of_games:,} (100.00%)")
         st.metric("Filtered Games",
