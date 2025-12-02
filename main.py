@@ -100,6 +100,8 @@ def main():
         st.metric(f"Unique Tags", f"{len(all_tags):,}")
 
     # st.info(f"**Tags**  \n{all_tags}")
+    with st.expander('All Tags'):
+        st.markdown(', '.join(get_all_tags(raw_df)))
 
 
 if __name__ == "__main__":
