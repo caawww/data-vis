@@ -1,4 +1,4 @@
-# [data-vis](https://data-vis-project.streamlit.app/)
+# [data-vis](https://steamtaganalysis.streamlit.app/)
 
 Install requirements
 ```shell
