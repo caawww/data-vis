@@ -61,8 +61,8 @@ def genre_details_page():
     with cols[5]:
         avg_playtime = tag_df["Average playtime forever"].mean()
         median_playtime = tag_df["Median playtime forever"].mean()
-        st.metric(f"Average Playtime", f"{avg_playtime / 60:.0f}h{avg_playtime % 60:02.0f}m")
-        st.metric(f"Median Playtime", f"{median_playtime / 60:.0f}h{median_playtime % 60:02.0f}m")
+        st.metric(f"Mean of Average Playtime", f"{avg_playtime // 60:.0f}h{avg_playtime % 60:02.0f}m")
+        st.metric(f"Mean of Median Playtime", f"{median_playtime // 60:.0f}h{median_playtime % 60:02.0f}m")
 
     with cols[6]:
         st.metric("Average DLC Count", f"{tag_df["DLC count"].mean():.2f}")
