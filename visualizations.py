@@ -55,8 +55,8 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     # Update layout styling
     fig.update_layout(
         # title=f'Tags Analysis: Popularity vs Quality',
-        xaxis_title='Number of Released Games (log)',
-        yaxis_title='Average Peak CCU (log)',
+        xaxis_title='Number of Released Games (log scale)',
+        yaxis_title='Average Peak CCU (log scale)',
         height=600,
         showlegend=False,
         hoverlabel=dict(
@@ -74,6 +74,7 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     fig.update_yaxes(
         tickformat=',',
         type='log',
+        dtick=1,
     )
 
     # Update dot styling
