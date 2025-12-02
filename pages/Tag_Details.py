@@ -111,7 +111,7 @@ def genre_details_page():
         co_tag_df["Avg Price"] = avg_prices
         co_tag_df["Avg Peak CCU"] = avg_ccu
 
-        st.subheader(f"Most Common Tags Found With '{selected_tag}'")
+        st.subheader(f"Top 10 Tags Commonly Found With '{selected_tag}'")
         st.dataframe(co_tag_df.head(10), hide_index=True)
     else:
         st.info("No co-occurring tags found.")
