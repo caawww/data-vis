@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 
 from data_loader import load_data, get_all_tags, filter_data
-from visualizations import create_review_ratio_over_time
+from visualizations import create_review_ratio_over_time, create_games_per_year_bar
 
 
 def genre_details_page():
@@ -69,6 +69,10 @@ def genre_details_page():
 
     st.subheader(f"Average Review Ratio Over Time for Tag '{selected_tag}'")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
+    st.plotly_chart(fig, config={"responsive": True})
+
+    st.subheader(f"Number of Games Released Over Time")
+    fig = create_games_per_year_bar(tag_df, selected_tag)
     st.plotly_chart(fig, config={"responsive": True})
 
     # Count co-occurring tags

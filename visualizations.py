@@ -145,3 +145,39 @@ def create_review_ratio_over_time(tag_df, selected_tag):
     )
 
     return fig
+
+
+@st.cache_data
+def create_games_per_year_bar(tag_df, selected_tag):
+    """Plot number of games released per year for a given tag as a bar chart."""
+    if tag_df.empty:
+        return empty_figure()  # Define empty_figure() to return a blank figure
+
+    # Count number of games per year
+    yearly_count = (
+        tag_df.groupby("Release_year")["Name"]
+        .count()
+        .reset_index(name="Game_count")
+        .sort_values("Release_year")
+    )
+
+    fig = px.bar(
+        yearly_count,
+        x="Release_year",
+        y="Game_count",
+        labels={
+            "Release_year": "Release Year",
+            "Game_count": "Number of Games"
+        },
+        # title=f"Number of Games Released Over Time for Tag '{selected_tag}'",
+        hover_data={
+            "Game_count": True
+        },
+        text="Game_count"
+    )
+
+    fig.update_traces(marker_color='skyblue', textposition='outside')
+    fig.update_xaxes(dtick=1)
+    fig.update_yaxes(rangemode='tozero')
+
+    return fig
