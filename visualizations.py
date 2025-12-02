@@ -1,3 +1,4 @@
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
@@ -28,12 +29,14 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         return empty_figure()
 
     scatter_data['highlight'] = scatter_data['Tags'].isin(selected_categories)
+    scatter_data['x_jitter'] = scatter_data['Game_count'] + np.random.uniform(-0.05, 0.05, len(scatter_data))
+    scatter_data['y_jitter'] = scatter_data['Avg_peak_ccu'] + np.random.uniform(-0.05, 0.05, len(scatter_data))
 
     # Create scatter plot
     fig = px.scatter(
         scatter_data,
-        x='Game_count',
-        y='Avg_peak_ccu',
+        x='x_jitter',
+        y='y_jitter',
         hover_name='Tags',
         custom_data=[
             scatter_data['Avg_total_review_ratio_pct'],
@@ -41,11 +44,12 @@ def create_main_scatter_plot(scatter_data, selected_categories):
             scatter_data['Avg_playtime'],
             scatter_data['Avg_peak_ccu'],
             scatter_data['Avg_review_ratio_pct'],
-            scatter_data['Total_Game_Count']
+            scatter_data['Total_Game_Count'],
+            scatter_data['Game_count'],
         ],
         size_max=15,
         color="highlight",
-        color_discrete_map={True: '#ff0000'}  # TODO - Specify what colour to highlight with
+        color_discrete_map={True: '#ff0000'}
     )
 
     # Update layout styling
@@ -81,7 +85,7 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         ),
         hovertemplate=(
             "<b>%{hovertext}</b><br><br>"
-            "Filtered Number of Games: %{x} (out of %{customdata[5]:,})<br>"
+            "Filtered Number of Games: %{customdata[6]} (out of %{customdata[5]:,})<br>"
             "Average Review Ratio: %{customdata[4]:.1f}%<br>"
             "Total Average Review ratio: %{customdata[0]:.1f}%<br>"
             "Total Reviews: %{customdata[1]:,}<br>"
