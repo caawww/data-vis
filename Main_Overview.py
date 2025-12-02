@@ -65,6 +65,7 @@ You can also select a specific tag to explore it in more detail. The data comes 
     all_tags = get_all_tags(df)
 
     scatter_data = prepare_analysis_type_scatter_data(df, raw_df, year_range, all_tags)
+    filtered_tags = scatter_data["Tags"].unique().tolist()
 
     # Data summary
     st.subheader(f"📁 Dataset Summary")
@@ -78,13 +79,13 @@ You can also select a specific tag to explore it in more detail. The data comes 
 
     with col2:
         st.metric(f"Total Tags", f"{len(get_all_tags(raw_df)):,}")
-        st.metric(f"Filtered Tags", f"{len(scatter_data):,}")
+        st.metric(f"Filtered Tags", f"{len(filtered_tags):,}")
 
     # Add the scatter plot visualization above data summary
     st.subheader(f"Peak Concurrent Number of Users vs Number of Released Games per Tag")
     selected_tags = st.multiselect(
         f"Tags to highlight:",
-        options=all_tags,
+        options=filtered_tags,
         default=None,
     )
 
