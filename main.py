@@ -18,14 +18,14 @@ def main():
     st.markdown("""""")
 
     # Load data
-    df = load_data()
-    total_number_of_games = len(df)
-    df = filter_data(df)
+    raw_df = load_data()
+    total_number_of_games = len(raw_df)
+    raw_df = filter_data(raw_df)
 
-    all_tags = get_all_tags(df)
+    all_tags = get_all_tags(raw_df)
 
     # Check data
-    if len(df) == 0:
+    if len(raw_df) == 0:
         st.error("❌ No valid data available after preprocessing.")
         return
 
@@ -33,7 +33,7 @@ def main():
     st.sidebar.header("Control Panel")
 
     # Year range slider
-    valid_years = df['Release_year'].dropna()
+    valid_years = raw_df['Release_year'].dropna()
     if len(valid_years) == 0:
         st.error("❌ No valid release years found in the dataset.")
         return
@@ -57,12 +57,23 @@ def main():
         step=1
     )
 
+    number_of_min_reviews = st.sidebar.slider(
+        "Minimum Amount of Reviews within a Game:",
+        min_value=0,
+        max_value=100,
+        value=10,
+        step=1
+    )
+
     # Add the scatter plot visualization above data summary
     selected_tags = st.multiselect(
         f"Tags to highlight:",
         options=all_tags,
         default=None,
     )
+
+    df = raw_df[raw_df['Total_reviews'] >= number_of_min_reviews]
+    print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
 
     # Main scatter plot
     st.subheader(f"Peak CCU vs Number of Released Games by Tags")
