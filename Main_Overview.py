@@ -47,7 +47,7 @@ You can also select a specific tag to explore it in more detail. The data comes 
     max_year = int(valid_years.max())
 
     year_range = st.sidebar.slider(
-        "Year Range:",
+        "Year Range",
         min_value=min_year,
         max_value=max_year,
         value=(min_year, max_year),
@@ -55,7 +55,7 @@ You can also select a specific tag to explore it in more detail. The data comes 
     )
 
     number_of_min_reviews = st.sidebar.slider(
-        "Minimum Amount of Reviews per Game:",
+        "Minimum Amount of Reviews per Game",
         min_value=0,
         max_value=100,
         value=10,
