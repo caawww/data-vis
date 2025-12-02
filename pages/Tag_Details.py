@@ -67,7 +67,7 @@ def genre_details_page():
         st.metric("Average DLC Count", f"{tag_df["DLC count"].mean():.2f}")
         st.metric("Median DLC Count", f"{tag_df["DLC count"].median():.0f}")
 
-    st.subheader(f"Average Review Ratio Over Time for Tag '{selected_tag}'")
+    st.subheader(f"Average Positive Review Ratio Over Time for Tag '{selected_tag}'")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
     st.plotly_chart(fig, config={"responsive": True})
 
