@@ -69,17 +69,14 @@ You can also select a specific tag to explore it in more detail. The data comes 
 
     # Data summary
     st.subheader(f"📁 Dataset Summary")
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     filtered_number_of_games = len(df)
     with col1:
         st.metric("Total Games", f"{total_number_of_games:,} (100.00%)")
         st.metric("Filtered Games",
                   f"{filtered_number_of_games:,} ({100 * filtered_number_of_games / total_number_of_games:.2f}%)")
-    with col2:
-        st.metric("Time Period", f"{min_year} - {max_year}")
-        # st.metric("Filtered Time Period", f"{int(scatter_data['Release_year'].min())} - {int(scatter_data['Release_year'].max())}")
 
-    with col3:
+    with col2:
         st.metric(f"Total Tags", f"{len(get_all_tags(raw_df)):,}")
         st.metric(f"Filtered Tags", f"{len(scatter_data):,}")
 
