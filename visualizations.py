@@ -32,6 +32,9 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     scatter_data['x_jitter'] = scatter_data['Game_count'] + np.random.uniform(-0.05, 0.05, len(scatter_data))
     scatter_data['y_jitter'] = scatter_data['Avg_peak_ccu'] + np.random.uniform(-0.05, 0.05, len(scatter_data))
 
+    scatter_data['play_hours'] = (scatter_data['Avg_playtime'] // 60).astype(int)
+    scatter_data['play_minutes'] = (scatter_data['Avg_playtime'] % 60).astype(int)
+
     # Create scatter plot
     fig = px.scatter(
         scatter_data,
@@ -41,11 +44,12 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         custom_data=[
             scatter_data['Avg_total_review_ratio_pct'],
             scatter_data['Total_reviews'],
-            scatter_data['Avg_playtime'],
             scatter_data['Avg_peak_ccu'],
             scatter_data['Avg_review_ratio_pct'],
             scatter_data['Total_Game_Count'],
             scatter_data['Game_count'],
+            scatter_data['play_hours'],
+            scatter_data['play_minutes']
         ],
         size_max=15,
         color="highlight",
@@ -86,12 +90,12 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         ),
         hovertemplate=(
             "<b>%{hovertext}</b><br><br>"
-            "Filtered Number of Games: %{customdata[6]} (out of %{customdata[5]:,})<br>"
-            "Average Review Ratio: %{customdata[4]:.1f}%<br>"
+            "Filtered Number of Games: %{customdata[5]} (out of %{customdata[4]:,})<br>"
+            "Average Review Ratio: %{customdata[3]:.1f}%<br>"
             "Total Average Review ratio: %{customdata[0]:.1f}%<br>"
             "Total Reviews: %{customdata[1]:,}<br>"
-            "Avg Playtime: %{customdata[2]:.1f} hours<br>"
-            "Avg Peak CCU: %{customdata[3]:.0f}<extra></extra>"
+            "Avg Playtime: %{customdata[6]}h %{customdata[7]:02d}m<br>"
+            "Avg Peak CCU: %{customdata[2]:.0f}<extra></extra>"
         )
     )
 
