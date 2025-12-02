@@ -49,11 +49,11 @@ def main():
         step=1
     )
 
-    number_of_games_range = st.sidebar.slider(
+    number_of_min_games = st.sidebar.slider(
         "Select Number of Min Games:",
         min_value=1,
         max_value=50,
-        value=1,
+        value=20,
         step=1
     )
 
@@ -66,7 +66,7 @@ def main():
 
     # Main scatter plot
     st.subheader(f"Peak CCU vs Number of Released Games by Tags")
-    scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_games_range)
+    scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_min_games)
     scatter_fig = create_main_scatter_plot(scatter_data, selected_tags)
     event = st.plotly_chart(scatter_fig, config={"responsive": True}, key="iris", on_select="rerun")
     if event and event['selection']['points']:
