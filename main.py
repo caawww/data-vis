@@ -65,18 +65,34 @@ def main():
         step=1
     )
 
+    df = raw_df[raw_df['Total_reviews'] >= number_of_min_reviews]
+    print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
+
+    # Data summary
+    st.subheader(f"📁 Dataset Summary")
+    col1, col2, col3 = st.columns(3)
+    filtered_number_of_games = len(df)
+    with col1:
+        st.metric("Total Games", f"{total_number_of_games:,} (100.00%)")
+        st.metric("Filtered Games",
+                  f"{filtered_number_of_games:,} ({100 * filtered_number_of_games / total_number_of_games:.2f}%)")
+    with col2:
+        st.metric("Time Period", f"{min_year} - {max_year}")
+        st.metric("Filtered Time Period", f"TODO")
+
+    with col3:
+        st.metric(f"Total Tags", f"{len(get_all_tags(df)):,}")
+        st.metric(f"Filtered Tags", f"TODO")
+
     # Add the scatter plot visualization above data summary
+    st.subheader(f"Peak Concurrent Number of Users vs Number of Released Games per Tag")
     selected_tags = st.multiselect(
         f"Tags to highlight:",
         options=all_tags,
         default=None,
     )
 
-    df = raw_df[raw_df['Total_reviews'] >= number_of_min_reviews]
-    print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
-
     # Main scatter plot
-    st.subheader(f"Peak Concurrent Number of Users vs Number of Released Games per Tag")
     scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_min_games)
     scatter_fig = create_main_scatter_plot(scatter_data, selected_tags)
     event = st.plotly_chart(scatter_fig, config={"responsive": True}, key="iris", on_select="rerun")
@@ -84,20 +100,6 @@ def main():
         clicked_tag = event['selection']['points'][0]['hovertext']
         st.session_state['tag'] = clicked_tag
         st.switch_page("pages/Tag_Details.py")
-
-    # Data summary
-    st.subheader(f"📁 Dataset Summary")
-    col1, col2, col3, col4 = st.columns(4)
-    filtered_number_of_games = len(df)
-    with col1:
-        st.metric("Total Games", f"{total_number_of_games:,}")
-    with col2:
-        st.metric("Filtered Games",
-                  f"{filtered_number_of_games:,} ({100 * filtered_number_of_games / total_number_of_games:.2f}%)")
-    with col3:
-        st.metric("Time Period", f"{min_year} - {max_year}")
-    with col4:
-        st.metric(f"Unique Tags", f"{len(all_tags):,}")
 
     # st.info(f"**Tags**  \n{all_tags}")
     with st.expander('All Tags'):
