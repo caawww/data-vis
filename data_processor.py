@@ -1,12 +1,13 @@
 import streamlit as st
 
+
 @st.cache_data
 def filter_year(df, year_range):
     return df[(df['Release_year'] >= year_range[0]) & (df['Release_year'] <= year_range[1])]
 
 
 @st.cache_data
-def prepare_analysis_type_scatter_data(df, year_range, all_categories):
+def prepare_analysis_type_scatter_data(df, raw_df, year_range, all_categories):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
 
@@ -59,5 +60,23 @@ def prepare_analysis_type_scatter_data(df, year_range, all_categories):
     # Fill NaN values for playtime and CCU with 0
     grouped['Avg_playtime'] = grouped['Avg_playtime'].fillna(0)
     grouped['Avg_peak_ccu'] = grouped['Avg_peak_ccu'].fillna(0)
+
+    # --- explode raw_df for global counts ---
+    raw_exploded = raw_df.copy()
+    raw_exploded['Tags'] = raw_exploded['Tags'].str.split(',')
+    raw_exploded = raw_exploded.explode('Tags')
+    raw_exploded['Tags'] = raw_exploded['Tags'].str.strip()
+    raw_exploded = raw_exploded[raw_exploded['Tags'] != '']
+
+    # Global total number of games per tag (unfiltered)
+    global_tag_counts = (
+        raw_exploded.groupby("Tags")["AppID"]
+        .count()
+        .reset_index(name="Total_Game_Count")
+    )
+
+    grouped = grouped.merge(global_tag_counts, on="Tags", how="left")
+
+    grouped['Total_Game_Count'] = grouped['Total_Game_Count'].fillna(0).astype(int)
 
     return grouped.sort_values('Game_count', ascending=False)

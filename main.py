@@ -60,7 +60,7 @@ def main():
     df = raw_df[raw_df['Total_reviews'] >= number_of_min_reviews]
     print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
 
-    scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags)
+    scatter_data = prepare_analysis_type_scatter_data(df, raw_df, year_range, all_tags)
 
     # Data summary
     st.subheader(f"📁 Dataset Summary")

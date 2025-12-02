@@ -40,7 +40,8 @@ def create_main_scatter_plot(scatter_data, selected_categories):
             scatter_data['Total_reviews'],
             scatter_data['Avg_playtime'],
             scatter_data['Avg_peak_ccu'],
-            scatter_data['Avg_review_ratio_pct']
+            scatter_data['Avg_review_ratio_pct'],
+            scatter_data['Total_Game_Count']
         ],
         size_max=15,
         color="highlight",
@@ -79,7 +80,7 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         ),
         hovertemplate=(
             "<b>%{hovertext}</b><br><br>"
-            "Number of Games: %{x}<br>"
+            "Filtered Number of Games: %{x} (out of %{customdata[5]:,})<br>"
             "Average Review Ratio: %{customdata[4]:.1f}%<br>"
             "Total Average Review ratio: %{customdata[0]:.1f}%<br>"
             "Total Reviews: %{customdata[1]:,}<br>"
