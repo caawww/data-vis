@@ -118,11 +118,11 @@ def genre_details_page():
 
     st.divider()
 
-    st.markdown(f"**{selected_tag}** games:")
+    st.subheader(f"Games:")
     st.dataframe(
         tag_df[
             ["Name", "Release_year", "Peak CCU", "Price", "Total_reviews", "Estimated owners"]
-        ].sort_values(by="Peak CCU", ascending=False), hide_index=True
+        ].sort_values(by="Peak CCU", ascending=False), hide_index=True, height=700
     )
 
 
