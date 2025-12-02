@@ -34,25 +34,37 @@ def genre_details_page():
     tag_df = df[df["Tags"].apply(lambda t: selected_tag in t)]
 
     # Stats about the Tag
-    col1, col2, col3, col4 = st.columns(4)
+    cols = st.columns(7)
 
-    tag_count = len(tag_df)
-    median_ratio = tag_df["Review_ratio"].median()
-    median_price = tag_df["Price"].median()
-    min_year = int(tag_df["Release_year"].min())
-    max_year = int(tag_df["Release_year"].max())
+    with cols[0]:
+        st.metric("Games With Tag", f"{len(tag_df):,}")
+        st.metric("Active Years", f"{int(tag_df["Release_year"].min())}–{int(tag_df["Release_year"].max())}")
 
-    with col1:
-        st.metric("Games With Tag", f"{tag_count:,}")
+    with cols[1]:
+        st.metric("Average Review Ratio", f"{tag_df["Review_ratio"].mean():.2f}")
+        st.metric("Median Review Ratio", f"{tag_df["Review_ratio"].median():.2f}")
 
-    with col2:
-        st.metric("Median Review Ratio", f"{median_ratio:.2f}")
+    with cols[2]:
+        st.metric("Average Price", f"${tag_df["Price"].mean():.2f}")
+        st.metric("Median Price", f"${tag_df["Price"].median():.2f}")
 
-    with col3:
-        st.metric("Median Price", f"${median_price:.2f}")
+    with cols[3]:
+        st.metric("Average Achievements", f"{tag_df["Achievements"].mean():.2f}")
+        st.metric("Median Achievements", f"{tag_df["Achievements"].median():.0f}")
 
-    with col4:
-        st.metric("Active Years", f"{min_year}–{max_year}")
+    with cols[4]:
+        st.metric("Average Age Requirement", f"{tag_df["Required age"].mean():.2f}")
+        st.metric("Median Age Requirement", f"{tag_df["Required age"].median():.0f}")
+
+    with cols[5]:
+        avg_playtime = tag_df["Average playtime forever"].mean()
+        median_playtime = tag_df["Median playtime forever"].mean()
+        st.metric(f"Average Playtime", f"{avg_playtime/60:.0f}h{avg_playtime%60:02.0f}m")
+        st.metric(f"Median Playtime", f"{median_playtime/60:.0f}h{median_playtime%60:02.0f}m")
+
+    with cols[6]:
+        st.metric("Average DLC Count", f"{tag_df["DLC count"].mean():.2f}")
+        st.metric("Median DLC Count", f"{tag_df["DLC count"].median():.0f}")
 
     st.subheader(f"Average Review Ratio Over Time for Tag '{selected_tag}'")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
