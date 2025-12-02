@@ -30,7 +30,7 @@ def main():
         return
 
     # Sidebar controls
-    st.sidebar.header("Control Panel")
+    st.sidebar.header("Filters")
 
     # Year range slider
     valid_years = raw_df['Release_year'].dropna()
@@ -42,7 +42,7 @@ def main():
     max_year = int(valid_years.max())
 
     year_range = st.sidebar.slider(
-        "Select Year Range:",
+        "Year Range:",
         min_value=min_year,
         max_value=max_year,
         value=(min_year, max_year),
@@ -50,7 +50,7 @@ def main():
     )
 
     number_of_min_games = st.sidebar.slider(
-        "Select Number of Min Games:",
+        "Minimum Amount of Games within a Tag:",
         min_value=1,
         max_value=50,
         value=20,
@@ -76,7 +76,7 @@ def main():
     print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
 
     # Main scatter plot
-    st.subheader(f"Peak CCU vs Number of Released Games by Tags")
+    st.subheader(f"Peak Concurrent Number of Users vs Number of Released Games per Tag")
     scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_min_games)
     scatter_fig = create_main_scatter_plot(scatter_data, selected_tags)
     event = st.plotly_chart(scatter_fig, config={"responsive": True}, key="iris", on_select="rerun")
