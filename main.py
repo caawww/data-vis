@@ -49,14 +49,6 @@ def main():
         step=1
     )
 
-    number_of_min_games = st.sidebar.slider(
-        "Minimum Amount of Games within a Tag:",
-        min_value=1,
-        max_value=50,
-        value=20,
-        step=1
-    )
-
     number_of_min_reviews = st.sidebar.slider(
         "Minimum Amount of Reviews within a Game:",
         min_value=0,
@@ -68,6 +60,8 @@ def main():
     df = raw_df[raw_df['Total_reviews'] >= number_of_min_reviews]
     print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
 
+    scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags)
+
     # Data summary
     st.subheader(f"📁 Dataset Summary")
     col1, col2, col3 = st.columns(3)
@@ -78,11 +72,11 @@ def main():
                   f"{filtered_number_of_games:,} ({100 * filtered_number_of_games / total_number_of_games:.2f}%)")
     with col2:
         st.metric("Time Period", f"{min_year} - {max_year}")
-        st.metric("Filtered Time Period", f"TODO")
+        # st.metric("Filtered Time Period", f"{int(scatter_data['Release_year'].min())} - {int(scatter_data['Release_year'].max())}")
 
     with col3:
-        st.metric(f"Total Tags", f"{len(get_all_tags(df)):,}")
-        st.metric(f"Filtered Tags", f"TODO")
+        st.metric(f"Total Tags", f"{len(get_all_tags(raw_df)):,}")
+        st.metric(f"Filtered Tags", f"{len(scatter_data):,}")
 
     # Add the scatter plot visualization above data summary
     st.subheader(f"Peak Concurrent Number of Users vs Number of Released Games per Tag")
@@ -93,7 +87,6 @@ def main():
     )
 
     # Main scatter plot
-    scatter_data = prepare_analysis_type_scatter_data(df, year_range, all_tags, number_of_min_games)
     scatter_fig = create_main_scatter_plot(scatter_data, selected_tags)
     event = st.plotly_chart(scatter_fig, config={"responsive": True}, key="iris", on_select="rerun")
     if event and event['selection']['points']:

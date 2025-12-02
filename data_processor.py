@@ -6,7 +6,7 @@ def filter_year(df, year_range):
 
 
 @st.cache_data
-def prepare_analysis_type_scatter_data(df, year_range, all_categories, number_of_games_range):
+def prepare_analysis_type_scatter_data(df, year_range, all_categories):
     """
     Prepare data for scatter plot showing analysis_type categories vs review ratio
 
@@ -59,8 +59,5 @@ def prepare_analysis_type_scatter_data(df, year_range, all_categories, number_of
     # Fill NaN values for playtime and CCU with 0
     grouped['Avg_playtime'] = grouped['Avg_playtime'].fillna(0)
     grouped['Avg_peak_ccu'] = grouped['Avg_peak_ccu'].fillna(0)
-
-    # Filter out categories with very few games (optional - adjust threshold as needed)
-    grouped = grouped[grouped['Game_count'] >= number_of_games_range]
 
     return grouped.sort_values('Game_count', ascending=False)
