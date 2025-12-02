@@ -38,6 +38,7 @@ def genre_details_page():
 
     with cols[0]:
         st.metric("Games With Tag", f"{len(tag_df):,}")
+        st.metric("Free to Play", f"{(tag_df["Price"] == 0).sum()}")
         st.metric("Active Years", f"{int(tag_df["Release_year"].min())}–{int(tag_df["Release_year"].max())}")
 
     with cols[1]:
@@ -59,8 +60,8 @@ def genre_details_page():
     with cols[5]:
         avg_playtime = tag_df["Average playtime forever"].mean()
         median_playtime = tag_df["Median playtime forever"].mean()
-        st.metric(f"Average Playtime", f"{avg_playtime/60:.0f}h{avg_playtime%60:02.0f}m")
-        st.metric(f"Median Playtime", f"{median_playtime/60:.0f}h{median_playtime%60:02.0f}m")
+        st.metric(f"Average Playtime", f"{avg_playtime / 60:.0f}h{avg_playtime % 60:02.0f}m")
+        st.metric(f"Median Playtime", f"{median_playtime / 60:.0f}h{median_playtime % 60:02.0f}m")
 
     with cols[6]:
         st.metric("Average DLC Count", f"{tag_df["DLC count"].mean():.2f}")
