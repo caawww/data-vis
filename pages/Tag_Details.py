@@ -16,7 +16,7 @@ def genre_details_page():
         initial_sidebar_state="expanded"
     )
 
-    st.title("📊 Tag Analysis")
+    title_placeholder = st.title(f"📊 Tag Details for ")
     st.markdown("""""")
 
     df = load_data()
@@ -32,6 +32,7 @@ def genre_details_page():
     )
     st.session_state["tag"] = selected_tag
     tag_df = df[df["Tags"].apply(lambda t: selected_tag in t)]
+    title_placeholder.title(f"📊 Tag Details for {selected_tag}")
 
     # Stats about the Tag
     cols = st.columns(7)
