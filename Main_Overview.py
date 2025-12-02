@@ -55,7 +55,7 @@ You can also select a specific tag to explore it in more detail. The data comes 
     )
 
     number_of_min_reviews = st.sidebar.slider(
-        "Minimum Amount of Reviews within a Game:",
+        "Minimum Amount of Reviews per Game:",
         min_value=0,
         max_value=100,
         value=10,
