@@ -82,6 +82,18 @@ def filter_data(input_df):
 
 
 @st.cache_data
+def filter_low_data(input_df, number_of_min_reviews, number_of_min_ccu):
+    df = input_df.copy()
+    df = df[df['Total_reviews'] >= number_of_min_reviews]
+    df = df[df['Peak CCU'] >= number_of_min_ccu]
+    print(
+        f"⚠️ Removed {len(input_df) - len(df)} rows with less than {number_of_min_reviews} reviews"
+        f" and less than {number_of_min_ccu} CCU per game"
+    )
+    return df
+
+
+@st.cache_data
 def get_all_tags(df):
     return sorted(set([
         category.strip()

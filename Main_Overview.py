@@ -1,7 +1,7 @@
 # streamlit_page_title: Custom Name
 import streamlit as st
 
-from data_loader import load_data, get_all_tags, filter_data
+from data_loader import load_data, get_all_tags, filter_data, filter_low_data
 from data_processor import prepare_analysis_type_scatter_data, filter_year
 from visualizations import create_main_scatter_plot
 
@@ -60,8 +60,15 @@ You can also select a specific tag to explore it in more detail. The data comes 
         step=1
     )
 
-    df = raw_df[raw_df['Total_reviews'] >= number_of_min_reviews]
-    print(f"⚠️ Removed {len(raw_df) - len(df)} rows with less than {number_of_min_reviews} reviews")
+    number_of_min_ccu = st.sidebar.slider(
+        "Minimum Amount of Peak CCU per Game",
+        min_value=0,
+        max_value=100,
+        value=10,
+        step=1
+    )
+
+    df = filter_low_data(raw_df, number_of_min_reviews, number_of_min_ccu)
     all_tags = get_all_tags(df)
 
     scatter_data = prepare_analysis_type_scatter_data(df, raw_df, year_range, all_tags)
