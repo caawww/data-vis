@@ -1,7 +1,9 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from upsetplot import UpSet, from_indicators
 
 
 @st.cache_data
@@ -192,5 +194,38 @@ def create_games_per_year_bar(tag_df, selected_tag):
     fig.update_traces(marker_color='skyblue', textposition='outside')
     fig.update_xaxes(dtick=1)
     fig.update_yaxes(rangemode='tozero')
+
+    return fig
+
+
+@st.cache_data
+def create_upset_plot(df, selected_tags):
+    """
+    Create an UpSet plot for games that contain ANY of the selected tags,
+    showing intersections sorted by number of games.
+    """
+    if df.empty or len(selected_tags) < 2:
+        return None
+
+    # Boolean indicator columns
+    data = df.copy()
+    for tag in selected_tags:
+        data[tag] = data["Tags"].apply(lambda t: tag in t)
+
+    # Convert to upset-compatible format
+    indicators = from_indicators(selected_tags, data[selected_tags])
+
+    # 🔥 Remove the "none-of-them" intersection
+    indicators = indicators[indicators.sum(axis=1) > 0]
+
+    # Build the figure
+    fig = plt.figure(figsize=(10, 6))
+    upset = UpSet(
+        indicators,
+        subset_size="count",  # number of games
+        sort_by="cardinality",  # sort by intersection size
+        sort_categories_by=None  # keep tag order stable
+    )
+    upset.plot(fig=fig)
 
     return fig

@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 
 from data_loader import load_data, get_all_tags, filter_data
-from visualizations import create_review_ratio_over_time, create_games_per_year_bar
+from visualizations import create_review_ratio_over_time, create_games_per_year_bar, create_upset_plot
 
 
 def genre_details_page():
@@ -116,6 +116,42 @@ def genre_details_page():
         st.dataframe(co_tag_df.head(10), hide_index=True)
     else:
         st.info("No co-occurring tags found.")
+
+    st.divider()
+
+    st.subheader(f"Tag Intersection {selected_tag}")
+
+    # Allow user to select additional tags to compare with the main tag
+    other_tags = [t for t in all_tags if t != selected_tag]
+
+    selected_tags_for_upset = st.multiselect(
+        "Select additional tags to compare:",
+        options=other_tags,
+        max_selections=5,
+    )
+
+    selected_tags_for_upset = [selected_tag] + selected_tags_for_upset
+
+    tag_counts = {
+        tag: df["Tags"].apply(lambda t: tag in t).sum()
+        for tag in selected_tags_for_upset
+    }
+
+    selected_tags_for_upset = sorted(
+        selected_tags_for_upset,
+        key=lambda t: tag_counts[t],
+        reverse=True
+    )
+
+    # Generate UpSet only when user picks 2+ tags
+    if len(selected_tags_for_upset) >= 2:
+        fig = create_upset_plot(df, selected_tags_for_upset)
+        if fig:
+            st.pyplot(fig)
+        else:
+            st.info("Not enough data for an UpSet plot.")
+    else:
+        st.info("Select at least 1 extra tag to generate an UpSet plot.")
 
     st.divider()
 

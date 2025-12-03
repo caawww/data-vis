@@ -1,4 +1,3 @@
-# streamlit_page_title: Custom Name
 import streamlit as st
 
 from data_loader import load_data, get_all_tags, filter_data, filter_low_data
