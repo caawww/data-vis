@@ -72,13 +72,15 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     fig.update_xaxes(
         tickformat=',',
         type='log',
-        dtick=1,
+        # dtick=1,
+        showgrid=True,
     )
 
     fig.update_yaxes(
         tickformat=',',
         type='log',
-        dtick=1,
+        # dtick=1,
+        showgrid=True,
     )
 
     # Update dot styling
