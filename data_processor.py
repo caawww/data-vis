@@ -2,27 +2,9 @@ import streamlit as st
 
 
 @st.cache_data
-def filter_year(df, year_range):
-    return df[(df['Release_year'] >= year_range[0]) & (df['Release_year'] <= year_range[1])]
-
-
-@st.cache_data
-def prepare_analysis_type_scatter_data(df, raw_df, year_range, all_categories):
-    """
-    Prepare data for scatter plot showing analysis_type categories vs review ratio
-
-    Args:
-        df: DataFrame with game data
-        year_range: tuple of (min_year, max_year)
-        all_categories: dict with lists of categories/genres/tags to include for each analysis type
-
-    Returns:
-        DataFrame with aggregated metrics per analysis_type
-    """
-    df_filtered = filter_year(df, year_range)
-
+def prepare_analysis_type_scatter_data(df, raw_df, all_categories):
     # Explode the analysis_type column (split comma-separated values)
-    df_exploded = df_filtered.copy()
+    df_exploded = df.copy()
     df_exploded['Tags'] = df_exploded['Tags'].str.split(',')
     df_exploded = df_exploded.explode('Tags')
 
