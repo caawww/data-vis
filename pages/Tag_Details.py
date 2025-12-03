@@ -23,6 +23,41 @@ def genre_details_page():
     df = filter_data(df)
     all_tags = get_all_tags(df)
 
+    # Year range slider
+    valid_years = df['Release_year'].dropna()
+    if len(valid_years) == 0:
+        st.error("❌ No valid release years found in the dataset.")
+        return
+
+    min_year = int(valid_years.min())
+    max_year = int(valid_years.max())
+
+    year_range = st.sidebar.slider(
+        "Year Range",
+        min_value=min_year,
+        max_value=max_year,
+        value=(min_year, max_year),
+        step=1
+    )
+
+    number_of_min_reviews = st.sidebar.slider(
+        "Minimum Amount of Reviews per Game",
+        min_value=0,
+        max_value=100,
+        value=0,
+        step=1
+    )
+
+    number_of_min_ccu = st.sidebar.slider(
+        "Minimum Amount of Peak CCU per Game",
+        min_value=0,
+        max_value=100,
+        value=0,
+        step=1
+    )
+
+    df = filter_low_data(df, year_range, number_of_min_reviews, number_of_min_ccu)
+
     preselected_tag = st.session_state.get("tag", None)
     selected_tag = st.selectbox(
         "Analysis for Tag:",
