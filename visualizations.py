@@ -3,6 +3,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from plotly.subplots import make_subplots
 from upsetplot import UpSet, from_indicators
 
 
@@ -108,55 +109,69 @@ def create_main_scatter_plot(scatter_data, selected_categories):
 
 @st.cache_data
 def create_review_ratio_over_time(tag_df, selected_tag):
-    """Plot average Review_ratio per year for a given tag, including count of games in hover."""
+    """Plot average Peak CCU and Review_ratio per year for a given tag with dual y-axes."""
     if tag_df.empty:
         return empty_figure()
 
-    # Compute average ratio per year
-    yearly_avg = (
-        tag_df.groupby("Release_year")["Review_ratio"]
-        .mean()
-        .reset_index()
-    )
+    # Compute average Peak CCU per year
+    yearly_avg = tag_df.groupby("Release_year")["Peak CCU"].mean().reset_index()
+
+    # Compute average Review_ratio per year
+    yearly_review = tag_df.groupby("Release_year")["Review_ratio"].mean().reset_index()
 
     # Compute number of games per year
-    yearly_count = (
-        tag_df.groupby("Release_year")["Name"]
-        .count()
-        .reset_index(name="Game_count")
+    yearly_count = tag_df.groupby("Release_year")["Name"].count().reset_index(name="Game_count")
+
+    # Merge stats
+    yearly_stats = yearly_avg.merge(yearly_review, on="Release_year").merge(yearly_count, on="Release_year")
+    yearly_stats = yearly_stats.sort_values("Release_year")
+
+    # Create figure with secondary y-axis
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Trace 1: Peak CCU
+    fig.add_trace(
+        go.Scatter(
+            x=yearly_stats["Release_year"],
+            y=yearly_stats["Peak CCU"],
+            mode="lines+markers",
+            name="Average Peak CCU",
+            line=dict(width=3, color="blue"),
+            marker=dict(size=8, opacity=0.9)
+        ),
+        secondary_y=False
     )
 
-    # Merge the two
-    yearly_stats = yearly_avg.merge(yearly_count, on="Release_year").sort_values("Release_year")
-
-    fig = px.line(
-        yearly_stats,
-        x="Release_year",
-        y="Review_ratio",
-        markers=True,
-        labels={
-            "Release_year": "Release Year",
-            "Review_ratio": "Average Positive Review Ratio",
-            "Game_count": "Number of Games"
-        },
-        # title=f"Average Review Ratio Over Time for Tag '{selected_tag}'",
-        hover_data={
-            "Game_count": True,
-            "Review_ratio": ":.3f"  # cleaner formatting
-        }
+    # Trace 2: Review Ratio
+    fig.add_trace(
+        go.Scatter(
+            x=yearly_stats["Release_year"],
+            y=yearly_stats["Review_ratio"],
+            mode="lines+markers",
+            name="Average Review Ratio",
+            line=dict(width=3, color="green"),
+            marker=dict(size=8, opacity=0.9)
+        ),
+        secondary_y=True
     )
 
+    # Update axes
+    fig.update_yaxes(title_text="Average Peak CCU", type='log', secondary_y=False)
+    fig.update_yaxes(title_text="Average Positive Review Ratio", secondary_y=True)
+
+    fig.update_xaxes(title_text="Release Year", dtick=1)
+
+    # Add hover info for number of games
     fig.update_traces(
-        line=dict(width=3),
-        marker=dict(size=8, opacity=0.9),
+        hovertemplate="<b>%{x}</b><br>Value: %{y}<br>Games: %{customdata}",
+        selector=dict(type="scatter")
     )
+    fig.update_traces(customdata=yearly_stats["Game_count"])
 
-    fig.update_yaxes(
-        range=[-0.02, 1.02],
-    )
-
-    fig.update_xaxes(
-        dtick=1,
+    fig.update_layout(
+        height=500,
+        hovermode="x unified",
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
     )
 
     return fig
