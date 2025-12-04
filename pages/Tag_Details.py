@@ -5,7 +5,7 @@ import streamlit as st
 import numpy as np
 
 from data_loader import load_data, get_all_tags, filter_data, filter_low_data
-from visualizations import create_review_ratio_over_time, create_games_per_year_bar, create_upset_plot
+from visualizations import create_violin_summary, create_games_per_year_bar, create_upset_plot
 
 
 def render_cooccurrence_table(tag_df, selected_tag, column_name, title_label):
@@ -150,8 +150,8 @@ def genre_details_page():
                   f"{int(raw_tag_df["Release_year"].min())}–{int(raw_tag_df["Release_year"].max())}")
         st.metric("Filtered Release Period", f"{min_tag}–{max_tag}")
 
-    st.subheader(f"Average Positive Review Ratio Over Time for Tag '{selected_tag}'")
-    fig = create_review_ratio_over_time(tag_df, selected_tag)
+    st.subheader(f"Tag Metrics Over Years for '{selected_tag}'")
+    fig = create_violin_summary(tag_df, (min_tag, max_tag))
     st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
 
     st.subheader(f"Number of Games Released Over Time")

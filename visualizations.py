@@ -107,72 +107,68 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     return fig
 
 
-@st.cache_data
-def create_review_ratio_over_time(tag_df, selected_tag):
-    """Plot average Peak CCU and Review_ratio per year for a given tag with dual y-axes."""
-    if tag_df.empty:
-        return empty_figure()
+def create_violin_summary(tag_df, year_range):
+    """
+    Create a 2x2 violin plot figure for a given tag_df and year_range.
 
-    # Compute average Peak CCU per year
-    yearly_avg = tag_df.groupby("Release_year")["Peak CCU"].mean().reset_index()
+    Plots:
+        Top-left: Peak CCU (log)
+        Top-right: Average Playtime Forever (log)
+        Bottom-left: Review_ratio (linear)
+        Bottom-right: Price (linear)
+    """
+    min_year, max_year = year_range
+    all_years = list(range(min_year, max_year + 1))
 
-    # Compute average Review_ratio per year
-    yearly_review = tag_df.groupby("Release_year")["Review_ratio"].mean().reset_index()
-
-    # Compute number of games per year
-    yearly_count = tag_df.groupby("Release_year")["Name"].count().reset_index(name="Game_count")
-
-    # Merge stats
-    yearly_stats = yearly_avg.merge(yearly_review, on="Release_year").merge(yearly_count, on="Release_year")
-    yearly_stats = yearly_stats.sort_values("Release_year")
-
-    # Create figure with secondary y-axis
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-    # Trace 1: Peak CCU
-    fig.add_trace(
-        go.Scatter(
-            x=yearly_stats["Release_year"],
-            y=yearly_stats["Peak CCU"],
-            mode="lines+markers",
-            name="Average Peak CCU",
-            line=dict(width=3, color="blue"),
-            marker=dict(size=8, opacity=0.9)
-        ),
-        secondary_y=False
+    fig = make_subplots(
+        rows=2, cols=2,
+        shared_xaxes=True,
+        horizontal_spacing=0.1,
+        vertical_spacing=0.15,
+        subplot_titles=("Peak CCU", "Average Playtime Forever", "Review Ratio", "Price")
     )
 
-    # Trace 2: Review Ratio
-    fig.add_trace(
-        go.Scatter(
-            x=yearly_stats["Release_year"],
-            y=yearly_stats["Review_ratio"],
-            mode="lines+markers",
-            name="Average Review Ratio",
-            line=dict(width=3, color="green"),
-            marker=dict(size=8, opacity=0.9)
-        ),
-        secondary_y=True
-    )
+    # Column info: (name, row, col, color, yaxis_type)
+    cols_info = [
+        ("Peak CCU", 1, 1, "blue", "log"),
+        ("Average playtime forever", 1, 2, "purple", "log"),
+        ("Review_ratio", 2, 1, "orange", "linear"),
+        ("Price", 2, 2, "green", "linear"),
+    ]
 
-    # Update axes
-    fig.update_yaxes(title_text="Average Peak CCU", type='log', secondary_y=False)
-    fig.update_yaxes(title_text="Average Positive Review Ratio", secondary_y=True)
+    for col_name, row, col, color, scale in cols_info:
+        for year in all_years:
+            year_values = tag_df[tag_df["Release_year"] == year][col_name].tolist()
+            if len(year_values) == 0:
+                year_values = [0]
+            fig.add_trace(
+                go.Violin(
+                    y=year_values,
+                    x=[year] * len(year_values),
+                    name=str(year),
+                    box_visible=True,
+                    line_color=color,
+                    marker=dict(size=3),
+                    meanline_visible=True,
+                    showlegend=False,
+                    hovertemplate="Year: %{x}<br>" + col_name + ": %{y}<extra></extra>"
+                ),
+                row=row,
+                col=col
+            )
+        fig.update_yaxes(title_text=col_name, type=scale, row=row, col=col)
 
-    fig.update_xaxes(title_text="Release Year", dtick=1)
-
-    # Add hover info for number of games
-    fig.update_traces(
-        hovertemplate="<b>%{x}</b><br>Value: %{y}<br>Games: %{customdata}",
-        selector=dict(type="scatter")
-    )
-    fig.update_traces(customdata=yearly_stats["Game_count"])
-
+    # Layout
     fig.update_layout(
-        height=500,
-        hovermode="x unified",
-        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
+        height=800,
+        width=1000,
+        hovermode="closest",  # ← changed from x unified
+        title_text="Tag Metrics Over Years"
     )
+
+    # Update x-axes for bottom row
+    # fig.update_xaxes(title_text="Release Year", tickmode="linear", row=2, col=1)
+    fig.update_xaxes(title_text="Release Year", tickmode="linear", row=2, col=2)
 
     return fig
 
