@@ -150,11 +150,11 @@ def genre_details_page():
 
     st.subheader(f"Average Positive Review Ratio Over Time for Tag '{selected_tag}'")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
-    st.plotly_chart(fig, config={"responsive": True})
+    st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
 
     st.subheader(f"Number of Games Released Over Time")
     fig = create_games_per_year_bar(tag_df, selected_tag)
-    st.plotly_chart(fig, config={"responsive": True})
+    st.plotly_chart(fig, config={"responsive": True}, key='games_per_year')
 
     col1, col2 = st.columns(2)
 
