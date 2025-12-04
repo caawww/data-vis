@@ -2,6 +2,7 @@ from collections import Counter
 
 import pandas as pd
 import streamlit as st
+import numpy as np
 
 from data_loader import load_data, get_all_tags, filter_data, filter_low_data
 from visualizations import create_review_ratio_over_time, create_games_per_year_bar, create_upset_plot
@@ -76,12 +77,12 @@ def genre_details_page():
     title_placeholder = st.title(f"📊 Tag Details for ")
     st.markdown("""""")
 
-    df = load_data()
-    df = filter_data(df)
-    all_tags = get_all_tags(df)
+    raw_df = load_data()
+    raw_df = filter_data(raw_df)
+    all_tags = get_all_tags(raw_df)
 
     # Year range slider
-    valid_years = df['Release_year'].dropna()
+    valid_years = raw_df['Release_year'].dropna()
     if len(valid_years) == 0:
         st.error("❌ No valid release years found in the dataset.")
         return
@@ -113,7 +114,7 @@ def genre_details_page():
         step=1
     )
 
-    df = filter_low_data(df, year_range, number_of_min_reviews, number_of_min_ccu)
+    df = filter_low_data(raw_df, year_range, number_of_min_reviews, number_of_min_ccu)
 
     preselected_tag = st.session_state.get("tag", None)
     selected_tag = st.selectbox(
@@ -123,52 +124,29 @@ def genre_details_page():
         key="genre_selector"
     )
     st.session_state["tag"] = selected_tag
+
     tag_df = df[df["Tags"].apply(lambda t: selected_tag in t)]
+    raw_tag_df = raw_df[raw_df['Tags'].apply(lambda t: selected_tag in t)]
+
     title_placeholder.title(f"📊 Tag Details for {selected_tag}")
 
     # Stats about the Tag
     cols = st.columns(3)
-
     with cols[0]:
-        st.metric("Games With Tag", f"{len(tag_df):,}")
+        st.metric("Total Games With Tag", f"{len(raw_tag_df):,}")
+        st.metric("Filtered Games With Tag", f"{len(tag_df):,}")
 
     with cols[1]:
-        st.metric("Free to Play", f"{(tag_df["Price"] == 0).sum()}")
+        st.metric("Total Free to Play", f"{(raw_tag_df["Price"] == 0).sum()}")
+        st.metric("Filtered Free to Play", f"{(tag_df["Price"] == 0).sum()}")
 
     with cols[2]:
-        st.metric("Release Period", f"{int(tag_df["Release_year"].min())}–{int(tag_df["Release_year"].max())}")
+        min_tag = int(tag_df["Release_year"].min()) if tag_df["Release_year"].min() is not np.nan else 0
+        max_tag = int(tag_df["Release_year"].max()) if tag_df["Release_year"].max() is not np.nan else 0
 
-    # with cols[1]:
-    #     ...
-    #     # st.metric("Average Review Ratio", f"{tag_df["Review_ratio"].mean():.2f}")
-    #     # st.metric("Median Review Ratio", f"{tag_df["Review_ratio"].median():.2f}")
-    #
-    # with cols[2]:
-    #     st.info('make plot of distributions')
-    #     st.metric("Average Price", f"${tag_df["Price"].mean():.2f}")
-    #     st.metric("Median Price", f"${tag_df["Price"].median():.2f}")
-    #
-    # with cols[3]:
-    #     st.info('make plot of distributions')
-    #     st.metric("Average Achievements", f"{tag_df["Achievements"].mean():.2f}")
-    #     st.metric("Median Achievements", f"{tag_df["Achievements"].median():.0f}")
-    #
-    # with cols[4]:
-    #     ...
-    #     # st.metric("Average Age Requirement", f"{tag_df["Required age"].mean():.2f}")
-    #     # st.metric("Median Age Requirement", f"{tag_df["Required age"].median():.0f}")
-    #
-    # with cols[5]:
-    #     st.info('make plot of distributions')
-    #     avg_playtime = tag_df["Average playtime forever"].mean()
-    #     median_playtime = tag_df["Median playtime forever"].mean()
-    #     st.metric(f"Mean of Average Playtime", f"{avg_playtime // 60:.0f}h{avg_playtime % 60:02.0f}m")
-    #     st.metric(f"Mean of Median Playtime", f"{median_playtime // 60:.0f}h{median_playtime % 60:02.0f}m")
-    #
-    # with cols[6]:
-    #     ...
-    #     # st.metric("Average DLC Count", f"{tag_df["DLC count"].mean():.2f}")
-    #     # st.metric("Median DLC Count", f"{tag_df["DLC count"].median():.0f}")
+        st.metric("Total Release Period",
+                  f"{int(raw_tag_df["Release_year"].min())}–{int(raw_tag_df["Release_year"].max())}")
+        st.metric("Filtered Release Period", f"{min_tag}–{max_tag}")
 
     st.subheader(f"Average Positive Review Ratio Over Time for Tag '{selected_tag}'")
     fig = create_review_ratio_over_time(tag_df, selected_tag)
