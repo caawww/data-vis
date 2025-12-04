@@ -29,7 +29,7 @@ def render_cooccurrence_table(tag_df, selected_tag, column_name, title_label):
     # No results
     if len(co_tags) == 0:
         st.info(f"No co-occurring {title_label.lower()} found.")
-        return
+        return []
 
     # Build DataFrame
     co_tag_df = (
