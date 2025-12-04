@@ -214,9 +214,6 @@ def create_games_per_year_bar(tag_df, selected_tag):
 
 
 def create_upset_plot(df, selected_tags, width=12, height=6):
-    """
-    Create a static UpSet plot using the upsetplot library with controlled figure size.
-    """
     if df.empty or len(selected_tags) < 2:
         fig = plt.figure(figsize=(width, height))
         fig.add_subplot(111).text(
@@ -230,9 +227,7 @@ def create_upset_plot(df, selected_tags, width=12, height=6):
         data[tag] = data["Tags"].apply(lambda t: tag in t)
 
     indicators = from_indicators(selected_tags, data[selected_tags])
-    indicators = indicators[indicators.sum(axis=1) > 0]  # remove "none-of-them"
 
-    # Create figure with desired size
     fig = plt.figure(figsize=(width, height))
 
     upset = UpSet(

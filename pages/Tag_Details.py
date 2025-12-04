@@ -169,7 +169,7 @@ def genre_details_page():
         )
 
     with col2:
-        render_cooccurrence_table(
+        best_tags = render_cooccurrence_table(
             tag_df=tag_df,
             selected_tag=selected_tag,
             column_name="Tags",
@@ -179,24 +179,8 @@ def genre_details_page():
     st.divider()
 
     st.subheader(f"Tag Intersection {selected_tag}")
-    other_tags = [t for t in all_tags if t != selected_tag]
-    selected_tags_for_upset = st.multiselect(
-        "Select additional tags to compare:",
-        options=other_tags,
-        max_selections=5,
-    )
-    selected_tags_for_upset = [selected_tag] + selected_tags_for_upset
-
-    tag_counts = {
-        tag: df["Tags"].apply(lambda t: tag in t).sum()
-        for tag in selected_tags_for_upset
-    }
-
-    selected_tags_for_upset = sorted(
-        selected_tags_for_upset,
-        key=lambda t: tag_counts[t],
-        reverse=True
-    )
+    selected_tags_for_upset = [selected_tag] + best_tags[:5]
+    selected_tags_for_upset = selected_tags_for_upset[::-1]
 
     fig = create_upset_plot(tag_df, selected_tags_for_upset, width=12, height=2)
     st.pyplot(fig)
