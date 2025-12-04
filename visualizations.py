@@ -25,9 +25,6 @@ def empty_figure():
 
 @st.cache_data
 def create_main_scatter_plot(scatter_data, selected_categories):
-    """
-    Create a scatter plot showing Tags categories vs review ratio
-    """
     if scatter_data.empty:
         return empty_figure()
 
@@ -108,27 +105,17 @@ def create_main_scatter_plot(scatter_data, selected_categories):
 
 
 def create_violin_summary(tag_df, year_range):
-    """
-    Create a 2x2 violin plot figure for a given tag_df and year_range.
-
-    Plots:
-        Top-left: Peak CCU (log)
-        Top-right: Average Playtime Forever (log)
-        Bottom-left: Review_ratio (linear)
-        Bottom-right: Price (linear)
-    """
     min_year, max_year = year_range
     all_years = list(range(min_year, max_year + 1))
 
     fig = make_subplots(
         rows=2, cols=2,
-        shared_xaxes=True,
+        shared_xaxes="all",
         horizontal_spacing=0.1,
         vertical_spacing=0.15,
         subplot_titles=("Peak CCU", "Average Playtime Forever", "Review Ratio", "Price")
     )
 
-    # Column info: (name, row, col, color, yaxis_type)
     cols_info = [
         ("Peak CCU", 1, 1, "blue", "log"),
         ("Average playtime forever", 1, 2, "purple", "log"),
@@ -158,17 +145,17 @@ def create_violin_summary(tag_df, year_range):
             )
         fig.update_yaxes(title_text=col_name, type=scale, row=row, col=col)
 
-    # Layout
     fig.update_layout(
         height=800,
         width=1000,
-        hovermode="closest",  # ← changed from x unified
+        hovermode="closest",
         title_text="Tag Metrics Over Years"
     )
 
-    # Update x-axes for bottom row
-    # fig.update_xaxes(title_text="Release Year", tickmode="linear", row=2, col=1)
-    fig.update_xaxes(title_text="Release Year", tickmode="linear", row=2, col=2)
+    fig.update_xaxes(title_text="Release Year", tickmode="linear", row=1, col=1, showticklabels=True)
+    fig.update_xaxes(title_text="Release Year", tickmode="linear", row=1, col=2, showticklabels=True)
+    fig.update_xaxes(title_text="Release Year", tickmode="linear", row=2, col=1, showticklabels=True)
+    fig.update_xaxes(title_text="Release Year", tickmode="linear", row=2, col=2, showticklabels=True)
 
     return fig
 
