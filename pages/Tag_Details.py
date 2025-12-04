@@ -7,6 +7,63 @@ from data_loader import load_data, get_all_tags, filter_data, filter_low_data
 from visualizations import create_review_ratio_over_time, create_games_per_year_bar, create_upset_plot
 
 
+def render_cooccurrence_table(tag_df, selected_tag, column_name, title_label):
+    """
+    Render a co-occurrence analysis table for a tag/category column.
+
+    Args:
+        tag_df       : Filtered DataFrame containing only rows with the selected_tag
+        selected_tag : The tag currently being analyzed
+        column_name  : Name of the column ("Tags" or "Categories")
+        title_label  : Label shown in the UI ("Tags", "Categories")
+    """
+    # Count co-occurring tags
+    co_tags = Counter()
+
+    for tags in tag_df[column_name]:
+        for t in tags.split(','):
+            if t != selected_tag:
+                co_tags[t] += 1
+
+    # No results
+    if len(co_tags) == 0:
+        st.info(f"No co-occurring {title_label.lower()} found.")
+        return
+
+    # Build DataFrame
+    co_tag_df = (
+        pd.DataFrame({
+            title_label: list(co_tags.keys()),
+            "Games": list(co_tags.values())
+        })
+        .sort_values("Games", ascending=False)
+        .reset_index(drop=True)
+    )
+
+    # Compute aggregated stats
+    avg_ratios = []
+    avg_prices = []
+    avg_ccu = []
+
+    for tag in co_tag_df[title_label]:
+        sub = tag_df[tag_df[column_name].apply(lambda t: tag in t)]
+        avg_ccu.append(sub["Peak CCU"].mean())
+        avg_prices.append(sub["Price"].mean())
+        avg_ratios.append(sub["Review_ratio"].mean())
+
+    co_tag_df["Avg Review Ratio"] = avg_ratios
+    # ✔ Format Avg Price as $XX.XX
+    co_tag_df["Avg Price"] = [
+        f"${p:.2f}" if pd.notnull(p) else "$0.00"
+        for p in avg_prices
+    ]
+    co_tag_df["Avg Peak CCU"] = avg_ccu
+
+    # Render UI
+    st.subheader(f"Top 10 {title_label} Commonly Found With '{selected_tag}'")
+    st.dataframe(co_tag_df.head(10), hide_index=True)
+
+
 def genre_details_page():
     # Set up page and theme
     st.set_page_config(
@@ -121,46 +178,23 @@ def genre_details_page():
     fig = create_games_per_year_bar(tag_df, selected_tag)
     st.plotly_chart(fig, config={"responsive": True})
 
-    # Count co-occurring tags
-    co_tags = Counter()
+    col1, col2 = st.columns(2)
 
-    for tags in tag_df["Tags"]:
-        for t in tags.split(','):
-            if t != selected_tag:
-                co_tags[t] += 1
-
-    # Build the DataFrame if there are any co-tags
-    if len(co_tags) > 0:
-        co_tag_df = (
-            pd.DataFrame({
-                "Tags": list(co_tags.keys()),
-                "Games": list(co_tags.values())
-            })
-            .sort_values("Games", ascending=False)
-            .reset_index(drop=True)
+    with col1:
+        render_cooccurrence_table(
+            tag_df=tag_df,
+            selected_tag=selected_tag,
+            column_name="Categories",
+            title_label="Categories"
         )
 
-        # Compute aggregated stats inside tag_df
-        avg_ratios = []
-        avg_prices = []
-        avg_ccu = []
-
-        for tags in co_tag_df["Tags"]:
-            # Correct membership test — as you required
-            sub = tag_df[tag_df["Tags"].apply(lambda t: tags in t)]
-
-            avg_ratios.append(sub["Review_ratio"].mean())
-            avg_prices.append(sub["Price"].mean())
-            avg_ccu.append(sub["Peak CCU"].mean())
-
-        co_tag_df["Avg Review Ratio"] = avg_ratios
-        co_tag_df["Avg Price"] = avg_prices
-        co_tag_df["Avg Peak CCU"] = avg_ccu
-
-        st.subheader(f"Top 10 Tags Commonly Found With '{selected_tag}'")
-        st.dataframe(co_tag_df.head(10), hide_index=True)
-    else:
-        st.info("No co-occurring tags found.")
+    with col2:
+        render_cooccurrence_table(
+            tag_df=tag_df,
+            selected_tag=selected_tag,
+            column_name="Tags",
+            title_label="Tags"
+        )
 
     st.divider()
 
