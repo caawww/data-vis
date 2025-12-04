@@ -64,6 +64,8 @@ def render_cooccurrence_table(tag_df, selected_tag, column_name, title_label):
     st.subheader(f"Top 10 {title_label} Commonly Found With '{selected_tag}'")
     st.dataframe(co_tag_df.head(10), hide_index=True)
 
+    return co_tag_df[title_label].to_list()
+
 
 def genre_details_page():
     # Set up page and theme
