@@ -197,7 +197,7 @@ def create_games_per_year_bar(tag_df, selected_tag):
 
 
 def create_upset_plot(df, selected_tags, width=12, height=6):
-    if len(df) < 100 or len(selected_tags) < 2:
+    if len(df) < 50 or len(selected_tags) < 2:
         fig = plt.figure(figsize=(width, height))
         fig.add_subplot(111).text(
             0.5, 0.5, "Not enough data available for the selected filters",
