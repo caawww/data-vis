@@ -213,33 +213,33 @@ def create_games_per_year_bar(tag_df, selected_tag):
     return fig
 
 
-@st.cache_data
-def create_upset_plot(df, selected_tags):
+def create_upset_plot(df, selected_tags, width=12, height=6):
     """
-    Create an UpSet plot for games that contain ANY of the selected tags,
-    showing intersections sorted by number of games.
+    Create a static UpSet plot using the upsetplot library with controlled figure size.
     """
     if df.empty or len(selected_tags) < 2:
-        return None
+        fig = plt.figure(figsize=(width, height))
+        fig.add_subplot(111).text(
+            0.5, 0.5, "No data available for the selected filters",
+            ha='center', va='center', fontsize=16
+        )
+        return fig
 
-    # Boolean indicator columns
     data = df.copy()
     for tag in selected_tags:
         data[tag] = data["Tags"].apply(lambda t: tag in t)
 
-    # Convert to upset-compatible format
     indicators = from_indicators(selected_tags, data[selected_tags])
+    indicators = indicators[indicators.sum(axis=1) > 0]  # remove "none-of-them"
 
-    # 🔥 Remove the "none-of-them" intersection
-    indicators = indicators[indicators.sum(axis=1) > 0]
+    # Create figure with desired size
+    fig = plt.figure(figsize=(width, height))
 
-    # Build the figure
-    fig = plt.figure(figsize=(10, 6))
     upset = UpSet(
         indicators,
-        subset_size="count",  # number of games
-        sort_by="cardinality",  # sort by intersection size
-        sort_categories_by=None  # keep tag order stable
+        subset_size="count",
+        sort_by="cardinality",
+        sort_categories_by=None,
     )
     upset.plot(fig=fig)
 

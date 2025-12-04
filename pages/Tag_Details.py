@@ -177,16 +177,12 @@ def genre_details_page():
     st.divider()
 
     st.subheader(f"Tag Intersection {selected_tag}")
-
-    # Allow user to select additional tags to compare with the main tag
     other_tags = [t for t in all_tags if t != selected_tag]
-
     selected_tags_for_upset = st.multiselect(
         "Select additional tags to compare:",
         options=other_tags,
         max_selections=5,
     )
-
     selected_tags_for_upset = [selected_tag] + selected_tags_for_upset
 
     tag_counts = {
@@ -200,15 +196,8 @@ def genre_details_page():
         reverse=True
     )
 
-    # Generate UpSet only when user picks 2+ tags
-    if len(selected_tags_for_upset) >= 2:
-        fig = create_upset_plot(df, selected_tags_for_upset)
-        if fig:
-            st.pyplot(fig)
-        else:
-            st.info("Not enough data for an UpSet plot.")
-    else:
-        st.info("Select at least 1 extra tag to generate an UpSet plot.")
+    fig = create_upset_plot(tag_df, selected_tags_for_upset, width=12, height=2)
+    st.pyplot(fig)
 
     st.divider()
 
