@@ -14,7 +14,7 @@ def main():
         initial_sidebar_state="expanded"
     )
 
-    st.title("🎮 Steam Visualisation")
+    st.title("Steam Tag Explorer")
     st.markdown("""
 This visualization aims to show Steam users' attention to the different video game tags (video game genres on the platform) based on the number of concurrent players and reviews. 
 The main overview enables you to explore which tags are getting a higher attention and how many games within those tags are offered on the platform.
