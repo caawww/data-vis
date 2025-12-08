@@ -218,10 +218,16 @@ def genre_details_page():
     The lower part shows which subsets of the tags represent each column at the top. Black dots mean the tag is included in the intersection.
     The small bottom left bar chart shows the number of games of the selected tag which also have the other
     """)
-    selected_tags_for_upset = [selected_tag] + best_tags[:5]
+    selected_tags_for_upset = st.multiselect(
+        "Select additional tags to compare:",
+        options=all_tags,
+        default=[selected_tag] + best_tags[:5],
+        max_selections=6,
+    )
+
     selected_tags_for_upset = selected_tags_for_upset[::-1]
 
-    fig = create_upset_plot(tag_df, selected_tags_for_upset, width=12, height=2)
+    fig = create_upset_plot(tag_df, selected_tags_for_upset)
     st.pyplot(fig)
 
     st.divider()
