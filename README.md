@@ -11,5 +11,5 @@ pip install -r requirements.txt
 
 Run project:
 ```shell
-streamlit run main.py
+streamlit run Main_Overview.py
 ```
