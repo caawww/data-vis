@@ -18,49 +18,74 @@ def render_cooccurrence_table(tag_df, selected_tag, column_name, title_label):
         column_name  : Name of the column ("Tags" or "Categories")
         title_label  : Label shown in the UI ("Tags", "Categories")
     """
-    # Count co-occurring tags
+    from collections import Counter
+
     co_tags = Counter()
 
+    # Count co-occurring tags/categories
     for tags in tag_df[column_name]:
         for t in tags.split(','):
             if t != selected_tag:
                 co_tags[t] += 1
 
-    # No results
     if len(co_tags) == 0:
         st.info(f"No co-occurring {title_label.lower()} found.")
         return []
 
-    # Build DataFrame
+    # Build base DataFrame
     co_tag_df = (
         pd.DataFrame({
             title_label: list(co_tags.keys()),
-            "Games": list(co_tags.values())
+            "Number of Games": list(co_tags.values())
         })
-        .sort_values("Games", ascending=False)
+        .sort_values("Number of Games", ascending=False)
         .reset_index(drop=True)
     )
 
-    # Compute aggregated stats
-    avg_ratios = []
-    avg_prices = []
+    # Aggregated statistics
     avg_ccu = []
+    avg_playtime = []
+    avg_ratio = []
+    avg_price = []
 
     for tag in co_tag_df[title_label]:
         sub = tag_df[tag_df[column_name].apply(lambda t: tag in t)]
-        avg_ccu.append(sub["Peak CCU"].mean())
-        avg_prices.append(sub["Price"].mean())
-        avg_ratios.append(sub["Review_ratio"].mean())
 
-    co_tag_df["Avg Review Ratio"] = avg_ratios
-    # ✔ Format Avg Price as $XX.XX
+        avg_ccu.append(sub["Peak CCU"].mean())
+        avg_ratio.append(sub["Review_ratio"].mean())
+        avg_price.append(sub["Price"].mean())
+        avg_playtime.append(sub["Average playtime forever"].mean())  # minutes
+
+    # Convert playtime: minutes → "Xh Ym"
+    def format_playtime(minutes):
+        if pd.isnull(minutes) or minutes <= 0:
+            return "0h 0m"
+        h = int(minutes // 60)
+        m = int(minutes % 60)
+        return f"{h}h {m}m"
+
+    # Add formatted columns
+    co_tag_df["Avg Peak CCU"] = avg_ccu
+    co_tag_df["Avg Playtime"] = [format_playtime(m) for m in avg_playtime]
+    co_tag_df["Avg Review Ratio"] = avg_ratio
     co_tag_df["Avg Price"] = [
         f"${p:.2f}" if pd.notnull(p) else "$0.00"
-        for p in avg_prices
+        for p in avg_price
     ]
-    co_tag_df["Avg Peak CCU"] = avg_ccu
 
-    # Render UI
+    # Reorder final columns exactly as requested
+    co_tag_df = co_tag_df[
+        [
+            title_label,
+            "Number of Games",
+            "Avg Peak CCU",
+            "Avg Playtime",
+            "Avg Review Ratio",
+            "Avg Price",
+        ]
+    ]
+
+    # Render table
     st.subheader(f"Most Common {title_label} Associated With '{selected_tag}'")
     st.dataframe(co_tag_df.head(10), hide_index=True)
 
@@ -187,7 +212,7 @@ def genre_details_page():
 
     st.divider()
 
-    st.subheader(f"Games:")
+    st.subheader(f"Games List")
     st.dataframe(
         tag_df[
             ["Name", "Release_year", "Peak CCU", "Price", "Total_reviews", "Estimated owners"]
