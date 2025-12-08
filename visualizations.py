@@ -227,6 +227,7 @@ def create_upset_plot(df, selected_tags, width=12, height=6):
         subset_size="count",
         sort_by="cardinality",
         sort_categories_by=None,
+        show_counts=True,
     )
     upset.plot(fig=fig)
 
