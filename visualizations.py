@@ -163,7 +163,7 @@ def create_violin_summary(tag_df, year_range):
     # Set x-axis labels
     for r in (1, 2):
         for c in (1, 2):
-            fig.update_xaxes(title_text="Release Year", tickmode="linear", row=r, col=c)
+            fig.update_xaxes(title_text="Release Year", tickmode="linear", row=r, col=c, showticklabels=True)
 
     return fig
 
