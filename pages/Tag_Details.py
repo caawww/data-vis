@@ -139,8 +139,8 @@ def genre_details_page():
         st.metric("Filtered Games With Tag", f"{len(tag_df):,}")
 
     with cols[1]:
-        st.metric("Total Free to Play", f"{(raw_tag_df["Price"] == 0).sum()}")
-        st.metric("Filtered Free to Play", f"{(tag_df["Price"] == 0).sum()}")
+        st.metric("Total Free to Play Games", f"{(raw_tag_df["Price"] == 0).sum()}")
+        st.metric("Filtered Free to Play Games", f"{(tag_df["Price"] == 0).sum()}")
 
     with cols[2]:
         min_tag = int(tag_df["Release_year"].min()) if tag_df["Release_year"].min() is not np.nan else 0
