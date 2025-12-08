@@ -61,7 +61,7 @@ def render_cooccurrence_table(tag_df, selected_tag, column_name, title_label):
     co_tag_df["Avg Peak CCU"] = avg_ccu
 
     # Render UI
-    st.subheader(f"Top 10 {title_label} Commonly Found With '{selected_tag}'")
+    st.subheader(f"Most Common {title_label} Associated With '{selected_tag}'")
     st.dataframe(co_tag_df.head(10), hide_index=True)
 
     return co_tag_df[title_label].to_list()
@@ -150,13 +150,13 @@ def genre_details_page():
                   f"{int(raw_tag_df["Release_year"].min())}–{int(raw_tag_df["Release_year"].max())}")
         st.metric("Filtered Release Period", f"{min_tag}–{max_tag}")
 
-    st.subheader(f"Tag Metrics Over Years for '{selected_tag}'")
-    fig = create_violin_summary(tag_df, (min_tag, max_tag))
-    st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
-
     st.subheader(f"Number of Games Released Over Time")
     fig = create_games_per_year_bar(tag_df, selected_tag)
     st.plotly_chart(fig, config={"responsive": True}, key='games_per_year')
+
+    st.subheader(f"Metrics Over Years")
+    fig = create_violin_summary(tag_df, (min_tag, max_tag))
+    st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
 
     col1, col2 = st.columns(2)
 
