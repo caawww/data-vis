@@ -180,6 +180,10 @@ def genre_details_page():
     st.plotly_chart(fig, config={"responsive": True}, key='games_per_year')
 
     st.subheader(f"Metrics Over Years")
+    st.markdown("""
+    Explore the distribution of relevant metrics for the selected time to get a better understanding of user’s attention and perception of the tag and the average price of the games within the tag. 
+Description of the metrics: Peak CCU: maximum number of players playing simultaneously; Average time forever: Average user’s playtime since March 2009, in minutes; Review Ratio: Average proportion of positive reviews over the total number of reviews within the tag (EXPLAIN MORE ABOUT HOW IT WAS CALCULATED). Price: Average price of the games released each year, in USD.
+    """)
     fig = create_violin_summary(tag_df, (min_tag, max_tag))
     st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
 
@@ -204,6 +208,9 @@ def genre_details_page():
     st.divider()
 
     st.subheader(f"Tag Intersection {selected_tag}")
+    st.markdown("""
+    Visualize the proportion of games released under the selected tag that also appear among the top 5 tags most frequently associated with it. The size of each intersection represents the number of games.
+    """)
     selected_tags_for_upset = [selected_tag] + best_tags[:5]
     selected_tags_for_upset = selected_tags_for_upset[::-1]
 
@@ -213,6 +220,9 @@ def genre_details_page():
     st.divider()
 
     st.subheader(f"Games List")
+    st.markdown("""
+    List of Games under the selected tag. The peak CCU represents the maximum number of players playing simultaneously (SINCE WHEN?) and the price is indicated in USD.
+    """)
     st.dataframe(
         tag_df[
             ["Name", "Release_year", "Peak CCU", "Price", "Total_reviews", "Estimated owners"]
