@@ -181,8 +181,13 @@ def genre_details_page():
 
     st.subheader(f"Metrics Over Years")
     st.markdown("""
-    Explore the distribution of relevant metrics for the selected time to get a better understanding of user’s attention and perception of the tag and the average price of the games within the tag. 
-Description of the metrics: Peak CCU: maximum number of players playing simultaneously; Average time forever: Average user’s playtime since March 2009, in minutes; Review Ratio: Average proportion of positive reviews over the total number of reviews within the tag (EXPLAIN MORE ABOUT HOW IT WAS CALCULATED). Price: Average price of the games released each year, in USD.
+    Explore the distributions of commonly measured data to get a better understanding of user’s attention and perception of the tag.
+    
+    Description of the metrics:\\
+    Peak CCU: maximum number of players playing simultaneously.\\
+    Average Playtime: Average user’s playtime since March 2009, in minutes.\\
+    Average Ratio of Positive Reviews: Average ratio of positive reviews over the total number of reviews within the tag.\\
+    Price: Average price of the games released each year, in USD.
     """)
     fig = create_violin_summary(tag_df, (min_tag, max_tag))
     st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
@@ -207,9 +212,11 @@ Description of the metrics: Peak CCU: maximum number of players playing simultan
 
     st.divider()
 
-    st.subheader(f"Tag Intersection {selected_tag}")
+    st.subheader(f"Tag Intersections with {selected_tag} Based on the Number of Games")
     st.markdown("""
-    Visualize the proportion of games released under the selected tag that also appear among the top 5 tags most frequently associated with it. The size of each intersection represents the number of games.
+    This UpSet plot represent portions of games with the selected tag together with the top 5 other ones most frequently associated with it.
+    The lower part shows which subsets of the tags represent each column at the top. Black dots mean the tag is included in the intersection.
+    The small bottom left bar chart shows the number of games of the selected tag which also have the other
     """)
     selected_tags_for_upset = [selected_tag] + best_tags[:5]
     selected_tags_for_upset = selected_tags_for_upset[::-1]
@@ -221,7 +228,7 @@ Description of the metrics: Peak CCU: maximum number of players playing simultan
 
     st.subheader(f"Games List")
     st.markdown("""
-    List of Games under the selected tag. The peak CCU represents the maximum number of players playing simultaneously (SINCE WHEN?) and the price is indicated in USD.
+    List of all games under the selected tag. The peak CCU represents the maximum number of players playing simultaneously and the price is indicated in USD.
     """)
     st.dataframe(
         tag_df[

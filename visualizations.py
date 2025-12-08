@@ -115,7 +115,7 @@ def create_violin_summary(tag_df, year_range):
         vertical_spacing=0.15,
         subplot_titles=(
             "Peak Concurrent Number of Users",
-            "Average Playtime Forever",
+            "Average Playtime",
             "Average Ratio of Positive Reviews",
             "Price ($)"
         )
