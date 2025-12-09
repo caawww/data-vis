@@ -106,6 +106,10 @@ You can also select a specific tag to explore it in more detail. The data comes 
     with st.expander('All Tags'):
         st.markdown(', '.join(get_all_tags(raw_df)))
 
+    with st.container():
+        st.markdown("---")
+        st.write("© 2025 Steam Tag Explorer. Created by Michal Kubirita, Marina Baños Ramírez, and Matej Zelenák.")
+
 
 if __name__ == "__main__":
     main()

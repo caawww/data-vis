@@ -219,6 +219,10 @@ def genre_details_page():
         ].sort_values(by="Peak CCU", ascending=False), hide_index=True, height=700
     )
 
+    with st.container():
+        st.markdown("---")
+        st.write("© 2025 Steam Tag Explorer. Created by Michal Kubirita, Marina Baños Ramírez, and Matej Zelenák.")
+
 
 if __name__ == "__main__":
     genre_details_page()
