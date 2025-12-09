@@ -115,7 +115,7 @@ def create_violin_summary(tag_df, year_range):
         vertical_spacing=0.15,
         subplot_titles=(
             "Peak Concurrent Number of Users",
-            "Average Playtime Forever",
+            "Average Playtime",
             "Average Ratio of Positive Reviews",
             "Price ($)"
         )
@@ -163,7 +163,7 @@ def create_violin_summary(tag_df, year_range):
     # Set x-axis labels
     for r in (1, 2):
         for c in (1, 2):
-            fig.update_xaxes(title_text="Release Year", tickmode="linear", row=r, col=c)
+            fig.update_xaxes(title_text="Release Year", tickmode="linear", row=r, col=c, showticklabels=True)
 
     return fig
 
@@ -227,6 +227,7 @@ def create_upset_plot(df, selected_tags, width=12, height=6):
         subset_size="count",
         sort_by="cardinality",
         sort_categories_by=None,
+        show_counts=True,
     )
     upset.plot(fig=fig)
 

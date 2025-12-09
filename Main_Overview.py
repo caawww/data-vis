@@ -16,10 +16,17 @@ def main():
 
     st.title("Steam Tag Explorer")
     st.markdown("""
-This visualization aims to show Steam users' attention to the different video game tags (video game genres on the platform) based on the number of concurrent players and reviews. 
-The main overview enables you to explore which tags are getting a higher attention and how many games within those tags are offered on the platform.
-You can also select a specific tag to explore it in more detail. The data comes from kaggle [dataset](https://www.kaggle.com/datasets/fronkongames/steam-games-dataset/). 
-        """)
+This is a data visualization course project, which aims to support exploration of different Steam tags (a term for video game genres on the platform).
+The goal is to make exploring Steam market and its users' behaviour easier.
+It might be interesting for you, if you are a game developer, who wants to make decisions about your projects; or if you are a part of the general public, which is curious about data and loves numbers.
+You can use the sliders in the left menu for minimum number of reviews and players per game to filter out very small, unknown games. We have pre-selected a value of 10, which leaves less than 8% of games!
+At the bottom you can click a drop-down button to see all the Steam tags written out.
+
+Additional information:
+The data comes from this Kaggle [dataset](https://www.kaggle.com/datasets/fronkongames/steam-games-dataset/). At the time we have accessed it, it was last modified in May 2025.\\
+The numbers of peak concurrent players are not newer than May 2025.\\
+In some visualisation we are displaying a ratio of positive reviews. We have calculated this as a percentage of positive reviews out of the total number of reviews.
+""")
 
     # Load data
     raw_df = load_data()
@@ -88,6 +95,10 @@ You can also select a specific tag to explore it in more detail. The data comes 
 
     # Add the scatter plot visualization above data summary
     st.subheader(f"Peak Concurrent Number of Users vs Number of Released Games per Tag")
+    st.markdown("""
+    This visualisation enables you to explore which tags are getting a higher attention (measured by the peak number of concurrent players, which is the recorder maximum number of players playing simultaneously) and how many games within the tags are offered on the Steam platform.
+    You can also click on a specific tag to explore it in more detail.
+    """)
     selected_tags = st.multiselect(
         f"Tags to highlight:",
         options=filtered_tags,

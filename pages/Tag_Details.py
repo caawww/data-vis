@@ -180,6 +180,15 @@ def genre_details_page():
     st.plotly_chart(fig, config={"responsive": True}, key='games_per_year')
 
     st.subheader(f"Metrics Over Years")
+    st.markdown("""
+    Explore the distributions of commonly measured data to get a better understanding of user’s attention and perception of the tag.
+    
+    Description of the metrics:\\
+    Peak CCU: maximum number of players playing simultaneously.\\
+    Average Playtime: Average user’s playtime since March 2009, in minutes.\\
+    Average Ratio of Positive Reviews: Average ratio of positive reviews over the total number of reviews within the tag.\\
+    Price: Average price of the games released each year, in USD.
+    """)
     fig = create_violin_summary(tag_df, (min_tag, max_tag))
     st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
 
@@ -203,16 +212,30 @@ def genre_details_page():
 
     st.divider()
 
-    st.subheader(f"Tag Intersection {selected_tag}")
-    selected_tags_for_upset = [selected_tag] + best_tags[:5]
+    st.subheader(f"Tag Intersections with {selected_tag} Based on the Number of Games")
+    st.markdown("""
+    This UpSet plot represent portions of games with the selected tag together with the top 5 other ones most frequently associated with it.
+    The lower part shows which subsets of the tags represent each column at the top. Black dots mean the tag is included in the intersection.
+    The small bottom left bar chart shows the number of games of the selected tag which also have the other
+    """)
+    selected_tags_for_upset = st.multiselect(
+        "Select additional tags to compare:",
+        options=all_tags,
+        default=[selected_tag] + best_tags[:5],
+        max_selections=6,
+    )
+
     selected_tags_for_upset = selected_tags_for_upset[::-1]
 
-    fig = create_upset_plot(tag_df, selected_tags_for_upset, width=12, height=2)
+    fig = create_upset_plot(tag_df, selected_tags_for_upset)
     st.pyplot(fig)
 
     st.divider()
 
     st.subheader(f"Games List")
+    st.markdown("""
+    List of all games under the selected tag. The peak CCU represents the maximum number of players playing simultaneously and the price is indicated in USD.
+    """)
     st.dataframe(
         tag_df[
             ["Name", "Release_year", "Peak CCU", "Price", "Total_reviews", "Estimated owners"]
