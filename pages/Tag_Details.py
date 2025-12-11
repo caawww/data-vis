@@ -238,7 +238,7 @@ def genre_details_page():
     """)
     st.dataframe(
         tag_df[
-            ["Name", "Release_year", "Peak CCU", "Price", "Total_reviews", "Estimated owners"]
+            ["Name", "Release_year", "Peak CCU", "Price", "Review_ratio", "Total_reviews", "Estimated owners"]
         ].sort_values(by="Peak CCU", ascending=False), hide_index=True, height=700
     )
 
