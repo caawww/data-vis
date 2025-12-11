@@ -102,7 +102,7 @@ def create_main_scatter_plot(scatter_data, selected_categories):
     return fig
 
 
-def create_violin_summary(tag_df, year_range):
+def create_whiskers_summary(tag_df, year_range):
     min_year, max_year = year_range
     all_years = list(range(min_year, max_year + 1))
 
@@ -119,7 +119,6 @@ def create_violin_summary(tag_df, year_range):
         )
     )
 
-    # Added custom y_label as 6th element
     cols_info = [
         ("Peak CCU", 1, 1, "blue", "log", "Peak CCU"),
         ("Average playtime forever", 1, 2, "purple", "log", "Avg. Playtime (minutes)"),
@@ -134,14 +133,13 @@ def create_violin_summary(tag_df, year_range):
                 year_values = [0]
 
             fig.add_trace(
-                go.Violin(
+                go.Box(
                     y=year_values,
                     x=[year] * len(year_values),
                     name=str(year),
-                    box_visible=True,
-                    line_color=color,
-                    marker=dict(size=3),
-                    meanline_visible=True,
+                    marker_color=color,
+                    boxpoints='outliers',  # shows whiskers and outliers
+                    line=dict(color=color),
                     showlegend=False,
                     hovertemplate="Year: %{x}<br>" + col_name + ": %{y}<extra></extra>"
                 ),
@@ -149,7 +147,6 @@ def create_violin_summary(tag_df, year_range):
                 col=col
             )
 
-        # Use custom y_label
         fig.update_yaxes(title_text=y_label, type=scale, row=row, col=col)
 
     fig.update_layout(
@@ -164,7 +161,6 @@ def create_violin_summary(tag_df, year_range):
             fig.update_xaxes(title_text="Release Year", tickmode="linear", row=r, col=c, showticklabels=True)
 
     return fig
-
 
 
 @st.cache_data

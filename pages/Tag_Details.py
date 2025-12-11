@@ -5,7 +5,7 @@ import streamlit as st
 import numpy as np
 
 from data_loader import load_data, get_all_tags, filter_data, filter_low_data
-from visualizations import create_violin_summary, create_games_per_year_bar, create_upset_plot
+from visualizations import create_whiskers_summary, create_games_per_year_bar, create_upset_plot
 
 
 def render_cooccurrence_table(tag_df, selected_tag, column_name, title_label):
@@ -189,7 +189,7 @@ def genre_details_page():
     Average Ratio of Positive Reviews: Average ratio of positive reviews over the total number of reviews within the tag.\\
     Price: Average price of the games released each year, in USD.
     """)
-    fig = create_violin_summary(tag_df, (min_tag, max_tag))
+    fig = create_whiskers_summary(tag_df, (min_tag, max_tag))
     st.plotly_chart(fig, config={"responsive": True}, key='review_ratio_over_time')
 
     col1, col2 = st.columns(2)
