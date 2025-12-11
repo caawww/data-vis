@@ -1,8 +1,8 @@
-from collections import Counter
+import io
 
+import numpy as np
 import pandas as pd
 import streamlit as st
-import numpy as np
 
 from data_loader import load_data, get_all_tags, filter_data, filter_low_data
 from visualizations import create_whiskers_summary, create_games_per_year_bar, create_upset_plot
@@ -228,7 +228,14 @@ def genre_details_page():
     selected_tags_for_upset = selected_tags_for_upset[::-1]
 
     fig = create_upset_plot(tag_df, selected_tags_for_upset)
-    st.pyplot(fig)
+
+    svg_buffer = io.StringIO()
+    fig.savefig(svg_buffer, format="svg", bbox_inches='tight')
+    svg_buffer.seek(0)
+
+    svg_content = svg_buffer.getvalue()
+
+    st.markdown(f'<div style="width:100%">{svg_content}</div>', unsafe_allow_html=True)
 
     st.divider()
 
