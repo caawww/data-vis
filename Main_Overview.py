@@ -101,7 +101,7 @@ In some visualisation we are displaying a ratio of positive reviews. We have cal
     """)
     selected_tags = st.multiselect(
         f"Tags to highlight:",
-        options=filtered_tags,
+        options=sorted(filtered_tags),
         default=None,
     )
 
