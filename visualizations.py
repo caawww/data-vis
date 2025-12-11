@@ -42,7 +42,6 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         y='y_jitter',
         hover_name='Tags',
         custom_data=[
-            scatter_data['Avg_total_review_ratio_pct'],
             scatter_data['Total_reviews'],
             scatter_data['Avg_peak_ccu'],
             scatter_data['Avg_review_ratio_pct'],
@@ -92,12 +91,11 @@ def create_main_scatter_plot(scatter_data, selected_categories):
         ),
         hovertemplate=(
             "<b>%{hovertext}</b><br><br>"
-            "Filtered Number of Games: %{customdata[5]} (out of %{customdata[4]:,})<br>"
-            "Average Review Ratio: %{customdata[3]:.1f}%<br>"
-            "Total Average Review ratio: %{customdata[0]:.1f}%<br>"
-            "Total Reviews: %{customdata[1]:,}<br>"
-            "Avg Playtime: %{customdata[6]}h %{customdata[7]:02d}m<br>"
-            "Avg Peak CCU: %{customdata[2]:.0f}<extra></extra>"
+            "Filtered Number of Games: %{customdata[4]} (out of %{customdata[3]:,})<br>"
+            "Average Review Ratio: %{customdata[2]:.1f}%<br>"
+            "Total Reviews: %{customdata[0]:,}<br>"
+            "Avg Playtime: %{customdata[5]}h %{customdata[6]:02d}m<br>"
+            "Avg Peak CCU: %{customdata[1]:.0f}<extra></extra>"
         )
     )
 
