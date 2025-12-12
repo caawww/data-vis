@@ -112,10 +112,10 @@ def create_whiskers_summary(tag_df, year_range):
         horizontal_spacing=0.1,
         vertical_spacing=0.15,
         subplot_titles=(
-            "Peak Concurrent Number of Users over the Years",
-            "Average Playtime over the Years",
-            "Ratio of Positive Reviews over the Years",
-            "Price over the Years",
+            "Peak Concurrent Number of Users over the Released Years",
+            "Average Playtime over the Released Years",
+            "Ratio of Positive Reviews over the Released Years",
+            "Price over the Released Years",
         )
     )
 
